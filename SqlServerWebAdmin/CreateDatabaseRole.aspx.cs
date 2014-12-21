@@ -1,5 +1,5 @@
-﻿using SqlAdmin;
-using SqlAdmin.Controls;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace SqlServerWebAdmin
 {
     public partial class CreateDatabaseRole : System.Web.UI.Page
     {
-        protected ItemPicker RoleUsers;
+        //protected ItemPicker RoleUsers;
         protected TextBox RolePassword;
 
         protected void CreateRole_Click(object sender, EventArgs e)
@@ -20,7 +20,7 @@ namespace SqlServerWebAdmin
             {
                 try
                 {
-                    SqlServer server = SqlServer.CurrentServer;
+                    Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
                     try
                     {
                         server.Connect();
@@ -31,7 +31,7 @@ namespace SqlServerWebAdmin
                         Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
                     }
 
-                    SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+                    Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
                     // TODO: Finish
 

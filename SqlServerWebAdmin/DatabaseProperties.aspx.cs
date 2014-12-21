@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SqlServerWebAdmin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
 
             try
             {
@@ -32,17 +33,15 @@ namespace SqlServerWebAdmin
 
             try
             {
-                SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+                Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
-                SqlDatabaseProperties props = database.GetDatabaseProperties();
-
-                NamePropertyLabel.Text = Server.HtmlEncode(props.Name);
-                StatusPropertyLabel.Text = Server.HtmlEncode(props.Status);
-                OwnerPropertyLabel.Text = Server.HtmlEncode(props.Owner);
-                DateCreatedPropertyLabel.Text = Server.HtmlEncode(Convert.ToString(props.DateCreated));
-                SizePropertyLabel.Text = props.Size.ToString("f2");
-                SpaceAvailablePropertyLabel.Text = props.SpaceAvailable.ToString("f2");
-                NumberOfUsersPropertyLabel.Text = Convert.ToString(props.NumberOfUsers);
+                NamePropertyLabel.Text = Server.HtmlEncode(database.Name);
+                StatusPropertyLabel.Text = Server.HtmlEncode(database.Status.ToString());
+                OwnerPropertyLabel.Text = Server.HtmlEncode(database.Owner);
+                DateCreatedPropertyLabel.Text = Server.HtmlEncode(Convert.ToString(database.CreateDate));
+                SizePropertyLabel.Text = database.Size.ToString("f2");
+                SpaceAvailablePropertyLabel.Text = database.SpaceAvailable.ToString("f2");
+                NumberOfUsersPropertyLabel.Text = Convert.ToString(database.Users.Count);
             }
             catch (System.Runtime.InteropServices.COMException ex)
             // Thrown if GetDatabaseProperties fails due to lack of permissions
@@ -77,7 +76,7 @@ namespace SqlServerWebAdmin
         {
             ErrorLabel.Visible = false;
 
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
 
             try
             {
@@ -91,12 +90,10 @@ namespace SqlServerWebAdmin
 
             try
             {
-                SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+                Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
-                SqlDatabaseProperties props = database.GetDatabaseProperties();
-
-                DataFileProperties.Properties = props.DataFile;
-                LogFileProperties.Properties = props.LogFile;
+                //DataFileProperties.Properties = database.;
+                //LogFileProperties.Properties = database.;
             }
             catch (System.Runtime.InteropServices.COMException ex)
             // Thrown if GetDatabaseProperties fails due to lack of permissions
@@ -115,11 +112,11 @@ namespace SqlServerWebAdmin
             }
         }
 
-        protected void ApplyButton_Click(object sender, System.EventArgs e)
+        /*protected void ApplyButton_Click(object sender, System.EventArgs e)
         {
             ErrorLabel.Visible = false;
 
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
@@ -130,17 +127,17 @@ namespace SqlServerWebAdmin
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
-            SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
             // Grab data from the form
             SqlDatabaseProperties props = null;
 
-            SqlFileProperties dataFileProperties = null;
-            SqlFileProperties logFileProperties = null;
+            //FileProperties dataFileProperties = null;
+            //SqlFileProperties logFileProperties = null;
 
             try
             {
-                dataFileProperties = DataFileProperties.Properties;
+                //dataFileProperties = DataFileProperties.Properties;
             }
             catch (Exception ex)
             {
@@ -215,6 +212,6 @@ namespace SqlServerWebAdmin
             LogFileProperties.Properties = props.LogFile;
 
             server.Disconnect();
-        }
+        }*/
     }
 }

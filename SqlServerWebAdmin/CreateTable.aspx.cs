@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace SqlServerWebAdmin
                 return;
             }
 
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
@@ -40,11 +41,11 @@ namespace SqlServerWebAdmin
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
-            SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
             ErrorCreatingLabel.Visible = false;
 
-            SqlTable table = server.Databases[database.Name].Tables[TableNameTextBox.Text];
+            Microsoft.SqlServer.Management.Smo.Table table = server.Databases[database.Name].Tables[TableNameTextBox.Text];
 
             // Ensure that the table doesn't exist yet
             if (table == null)
@@ -54,17 +55,17 @@ namespace SqlServerWebAdmin
 
                 // In order to find out whether the table name is valid, we create a temporary dummy table
                 // and see what happens.
-                SqlTable dummyTable = null;
+                Microsoft.SqlServer.Management.Smo.Table dummyTable = null;
 
                 try
                 {
-                    dummyTable = database.Tables.Add(TableNameTextBox.Text, new SqlColumnInformation[] { new SqlColumnInformation("Column1") });
+                    dummyTable = new Microsoft.SqlServer.Management.Smo.Table(database, TableNameTextBox.Text);
+                    dummyTable.Create();
                 }
                 catch (Exception ex)
                 {
-                    // Disconnect and show error
-                    if (dummyTable != null)
-                        dummyTable.Remove();
+                    if(dummyTable != null)
+                        dummyTable.Drop();
 
                     server.Disconnect();
                     ErrorCreatingLabel.Visible = true;
@@ -73,7 +74,7 @@ namespace SqlServerWebAdmin
                 }
 
                 // Delete the dummy table
-                dummyTable.Remove();
+                dummyTable.Drop();
 
                 server.Disconnect();
                 Response.Redirect(String.Format("editcolumn.aspx?database={0}&table={1}", Server.UrlEncode(database.Name), Server.UrlEncode(TableNameTextBox.Text)));

@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace SqlServerWebAdmin
                 return;
             }
 
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
@@ -40,11 +41,11 @@ namespace SqlServerWebAdmin
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
-            SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
             ErrorCreatingLabel.Visible = false;
 
-            SqlStoredProcedure sproc = database.StoredProcedures[SProcNameTextBox.Text];
+            StoredProcedure sproc = database.StoredProcedures[SProcNameTextBox.Text];
 
             // Ensure that SProc doesn't exist yet
             if (sproc == null)
@@ -54,17 +55,18 @@ namespace SqlServerWebAdmin
 
                 // In order to find out whether the table name is valid, we create a temporary dummy table
                 // and see what happens.
-                SqlStoredProcedure dummySproc = null;
+                StoredProcedure dummySproc = null;
 
                 try
                 {
-                    dummySproc = database.StoredProcedures.Add(SProcNameTextBox.Text, "CREATE PROCEDURE [" + SProcNameTextBox.Text + "] AS\r\nGO");
+                    dummySproc = new StoredProcedure(database, SProcNameTextBox.Text); //database.StoredProcedures.Add(SProcNameTextBox.Text, "CREATE PROCEDURE [" + SProcNameTextBox.Text + "] AS\r\nGO");
+                    dummySproc.Create();
                 }
                 catch (Exception ex)
                 {
                     // Disconnect and show error
                     if (dummySproc != null)
-                        dummySproc.Remove();
+                        dummySproc.Drop();
 
                     server.Disconnect();
                     ErrorCreatingLabel.Visible = true;
@@ -73,7 +75,7 @@ namespace SqlServerWebAdmin
                 }
 
                 // Delete the dummy stored procedure
-                dummySproc.Remove();
+                dummySproc.Drop();
 
                 server.Disconnect();
 

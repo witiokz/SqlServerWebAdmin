@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,8 +16,8 @@ namespace SqlServerWebAdmin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
-            SqlAdmin.SqlServerRole serverRole;
+             Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
+            ServerRole serverRole;
             try
             {
                 server.Connect();
@@ -26,7 +27,7 @@ namespace SqlServerWebAdmin
                 //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
-            SqlServerRoleCollection serverRoles = server.Roles;
+            ServerRoleCollection serverRoles = server.Roles;
             server.Disconnect();
 
             // Create DataSet from list of databases
@@ -43,9 +44,12 @@ namespace SqlServerWebAdmin
 
                 ds.Tables[0].Rows.Add(
                     new object[] {
-                        Server.HtmlEncode(serverRole.FullName), 
+                        //Server.HtmlEncode(serverRole.FullName), 
                         Server.HtmlEncode(serverRole.Name),
-                        Server.HtmlEncode(serverRole.Description),}
+                        //Server.HtmlEncode(serverRole.Description),\
+                    
+                    
+                    }
                 );
             }
 

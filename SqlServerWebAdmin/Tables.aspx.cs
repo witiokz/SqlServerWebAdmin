@@ -1,11 +1,13 @@
-﻿using SqlAdmin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
+using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 
 namespace SqlServerWebAdmin
 {
@@ -32,18 +34,17 @@ namespace SqlServerWebAdmin
 
         private void FilterTablesButton_Click(object sender, System.EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
             }
             catch (System.Exception ex)
             {
-                //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
-                Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
+                Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Page.Server.UrlEncode(ex.Message), Page.Server.UrlEncode(ex.StackTrace)));
             }
 
-            SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
             SqlObjectType objectTypeFilter;
             switch (TableTypeDropDownList.SelectedIndex)
@@ -61,7 +62,7 @@ namespace SqlServerWebAdmin
             // Get table list
             AddNewTableHyperLink.NavigateUrl = String.Format("createtable.aspx?database={0}", Server.UrlEncode(Request["database"]));
 
-            SqlTableCollection tables = database.Tables;
+            TableCollection tables = database.Tables;
 
             // Create DataSet from result
             DataSet ds = new DataSet();
@@ -74,11 +75,13 @@ namespace SqlServerWebAdmin
             ds.Tables[0].Columns.Add("rows");
             for (int i = 0; i < tables.Count; i++)
             {
-                SqlTable table = tables[i];
+                Microsoft.SqlServer.Management.Smo.Table table = tables[i];
 
                 // Only add objects that we want (system or user)
-                if ((table.TableType & objectTypeFilter) > 0)
-                    ds.Tables[0].Rows.Add(new object[] { Server.HtmlEncode(table.Name), Server.UrlEncode(table.Name), Server.HtmlEncode(table.Owner), Server.HtmlEncode(table.TableType.ToString()), Server.HtmlEncode(table.CreateDate.ToString()), table.Rows });
+                /*if ((table. && objectTypeFilter) > 0)
+                    ds.Tables[0].Rows.Add(new object[] { Server.HtmlEncode(table.Name), 
+                        Server.UrlEncode(table.Name), Server.HtmlEncode(table.Owner), 
+                        Server.HtmlEncode(table.TableType.ToString()), Server.HtmlEncode(table.CreateDate.ToString()), table.Rows });*/
             }
 
             // Show message if there are no tables, otherwise show datagrid

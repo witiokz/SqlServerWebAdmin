@@ -1,4 +1,4 @@
-﻿using SqlAdmin;
+﻿using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -20,7 +20,7 @@ namespace SqlServerWebAdmin
 
         protected void ImportButton_Click(object sender, System.EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
 
             // Grab file from post data
             HttpPostedFile file = FileUploadInput.PostedFile;
@@ -47,7 +47,7 @@ namespace SqlServerWebAdmin
             try
             {
                 // No need for connect/disconnect since Query() uses ADO.NET, not DMO
-                server.Query(q);
+                //server.query(q);
                 ImportSuccessLabel.Visible = true;
             }
             catch (SqlException ex)

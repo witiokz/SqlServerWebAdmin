@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -18,7 +19,7 @@ namespace SqlServerWebAdmin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
@@ -29,9 +30,9 @@ namespace SqlServerWebAdmin
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
-            SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
-            SqlTable table = database.Tables[Request["table"]];
+            Microsoft.SqlServer.Management.Smo.Table table = database.Tables[Request["table"]];
 
             // Set link for add new column
             AddNewColumnHyperLink.NavigateUrl = String.Format("editcolumn.aspx?database={0}&table={1}", Server.UrlEncode(Request["database"]), Server.UrlEncode(Request["table"]));
@@ -48,7 +49,7 @@ namespace SqlServerWebAdmin
                     // Update table properties
 
                     // Get columns list
-                    SqlColumnCollection columns = table.Columns;
+                    ColumnCollection columns = table.Columns;
 
                     DataSet ds = new DataSet();
                     ds.Tables.Add();
@@ -66,15 +67,15 @@ namespace SqlServerWebAdmin
 
                     for (int i = 0; i < columns.Count; i++)
                     {
-                        SqlColumnInformation columnInfo = columns[i].ColumnInformation;
-                        ds.Tables[0].Rows.Add(new object[] { columnInfo.Key, columnInfo.Identity, Server.HtmlEncode(columnInfo.Name), Server.HtmlEncode(columnInfo.DataType), columnInfo.Size, columnInfo.Precision, columnInfo.Scale, columnInfo.Nulls, Server.HtmlEncode(columnInfo.DefaultValue), Server.UrlEncode(columnInfo.Name) });
+                        Column columnInfo = columns[i];
+                       // ds.Tables[0].Rows.Add(new object[] { columnInfo.InPrimaryKey, columnInfo.Identity, Server.HtmlEncode(columnInfo.Name), Server.HtmlEncode(columnInfo.DataType), columnInfo.Size, columnInfo.Precision, columnInfo.Scale, columnInfo.Nulls, Server.HtmlEncode(columnInfo.DefaultValue), Server.UrlEncode(columnInfo.Name) });
                     }
                     this.ColumnsDataGrid.DataSource = ds;
                     this.ColumnsDataGrid.DataBind();
                 }
 
                 // If the table has data in it, disable edit column
-                if (table.Rows > 0)
+                if (table.RowCount > 0)
                 {
                     this.ColumnsDataGrid.Columns[2].Visible = true;
                     this.ColumnsDataGrid.Columns[3].Visible = false;

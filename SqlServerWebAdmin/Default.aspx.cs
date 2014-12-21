@@ -20,6 +20,13 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.HtmlControls;
 using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
+using Microsoft.Win32;
+using System.Collections.Generic;
+
+using System.Linq;
+using System.ServiceProcess;
+using System.Diagnostics;
 
 namespace SqlWebAdmin
 {
@@ -28,8 +35,6 @@ namespace SqlWebAdmin
     /// </summary>
     public partial class Login : Page
     {
-        SqlAdmin.Security security = new SqlAdmin.Security();
-
         public Login()
         {
             Page.Init += new System.EventHandler(Page_Init);
@@ -37,10 +42,11 @@ namespace SqlWebAdmin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            if (this.ServerTextBox.Text != null && this.ServerTextBox.Text.Length == 0)
-            {
-                ServerTextBox.Text = "(local)"; // "localhost";
-            }
+
+            //if (this.ServerTextBox.Text != null && this.ServerTextBox.Text.Length == 0)
+            //{
+            //    ServerTextBox.Text = "(local)"; // "localhost";
+            //}
 
             this.ErrorLabel.Visible = false;
             this.LogoutInfoLabel.Visible = false;
@@ -73,13 +79,14 @@ namespace SqlWebAdmin
 
             if (!IsPostBack)
             {
-                if (Request.IsAuthenticated == true && security.WebServer == "iis")
-                {
-                this.UsernameTextBox.Text = User.Identity.Name;
-                    lblCredMsg.Text = "Please enter a SQL Server name:";
-                    this.UsernameTextBox.Enabled = false;
-                    this.PasswordTextBox.Enabled = false;
-                }
+                SqlServerDLL.DataSource = GetSqlServers();
+                SqlServerDLL.DataValueField = "Key";
+                SqlServerDLL.DataTextField = "Value";
+                SqlServerDLL.DataBind();
+
+                    this.UsernameTextBox.Text = GetCurrentUser();
+                    UsernameTextBox.Enabled = false;
+                    PasswordTextBox.Enabled = false;
             }
         }
 
@@ -97,15 +104,16 @@ namespace SqlWebAdmin
             if (!IsValid)
                 return;
 
+            var serverName = SqlServerDLL.SelectedItem.Text;//ServerTextBox.Text
+
             bool useIntegrated;
-            Server server;
-            SqlAdmin.Security security = new SqlAdmin.Security();
+            Server server = new Server(serverName);
 
             var connected = false;
 
             if (AuthRadioButtonList.SelectedItem.Value == "windows")
             {
-                if (security.WebServer == "iis" && System.Security.Principal.WindowsIdentity.GetCurrent().Name != this.UsernameTextBox.Text)
+                if (GetCurrentUser() != this.UsernameTextBox.Text)
                 {
                     ErrorLabel.Visible = true;
                     ErrorLabel.Text = "IIS verion of SQL Web Admin doesn't support windows logins other than your own.<br>";
@@ -115,7 +123,6 @@ namespace SqlWebAdmin
                 {
                    // server = new SqlServer(ServerTextBox.Text, this.UsernameTextBox.Text, this.PasswordTextBox.Text, true);
 
-                    server = new Server(ServerTextBox.Text);
                     //Using windows authentication
                     server.ConnectionContext.LoginSecure = true;
                     server.ConnectionContext.Connect();
@@ -139,7 +146,11 @@ namespace SqlWebAdmin
             }
             else
             {
-                server = new Server(ServerTextBox.Text, this.UsernameTextBox.Text, this.PasswordTextBox.Text, false);
+                //Using SQL Server authentication
+                server.ConnectionContext.LoginSecure = false;
+                server.ConnectionContext.Login = UsernameTextBox.Text;
+                server.ConnectionContext.Password = PasswordTextBox.Text;
+                server.ConnectionContext.Connect();
                 useIntegrated = false;
             }
 
@@ -147,15 +158,15 @@ namespace SqlWebAdmin
             {
                 if (useIntegrated)
                 {
-                    AdminUser.CurrentUser = new AdminUser(this.UsernameTextBox.Text, this.PasswordTextBox.Text, ServerTextBox.Text, true);
-                    security.WriteCookieForFormsAuthentication(server.Username, server.Password, false, SqlLoginType.NTUser);
+                    AdminUser.CurrentUser = new AdminUser(UsernameTextBox.Text, this.PasswordTextBox.Text, serverName, true);
+                    DbUtlity.WriteCookieForFormsAuthentication(UsernameTextBox.Text, PasswordTextBox.Text, false, SqlLoginType.NTUser);
                 }
                 else
                 {
-                    AdminUser.CurrentUser = new AdminUser(this.UsernameTextBox.Text, this.PasswordTextBox.Text, ServerTextBox.Text, false);
-                    security.WriteCookieForFormsAuthentication(
-                        server.Username,
-                        server.Password,
+                    AdminUser.CurrentUser = new AdminUser(this.UsernameTextBox.Text, this.PasswordTextBox.Text, serverName, false);
+                    DbUtlity.WriteCookieForFormsAuthentication(
+                        UsernameTextBox.Text,
+                        PasswordTextBox.Text,
                         false,
                         SqlLoginType.Standard);
                 }
@@ -180,17 +191,78 @@ namespace SqlWebAdmin
                     this.PasswordTextBox.Enabled = true;
                     break;
                 case "windows":
-                    if (Request.IsAuthenticated == true && security.WebServer == "iis")
-                    {
-                        this.UsernameTextBox.Text = User.Identity.Name;
-                        lblCredMsg.Text = "Please enter a SQL Server name:";
+                        this.UsernameTextBox.Text = GetCurrentUser();
                         this.UsernameTextBox.Enabled = false;
                         this.PasswordTextBox.Enabled = false;
-                    }
+                    
                     break;
                 default:
                     break;
             }
+        }
+        private Dictionary<string, string> GetSqlServers()
+        {
+            DataTable dt = SmoApplication.EnumAvailableSqlServers(true);
+            List<string> servers = new List<string>();
+            var sqlServers = new Dictionary<string, string>();
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (servers.Contains("\\") || servers.Contains("/"))
+                    {
+                        sqlServers.Add(sqlServers.Count.ToString(), dr["Name"].ToString());
+                    }
+                    else
+                    {
+                        servers.Add(dr["Name"].ToString());
+                    }
+                }
+            }
+
+            if (servers.Count > 0)
+            {
+                List<string> processes = new List<string>();
+                RegistryKey rk = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
+                String[] instances = (String[])rk.GetValue("InstalledInstances");
+                foreach (var instance in instances)
+                {
+                    processes.Add(instance);
+                }
+
+                foreach (var item in rk.GetSubKeyNames())
+                {
+                    if(!processes.Any(i => i.Contains(item)))
+                    {
+                        processes.Add(item);
+                    }
+                }
+
+                var services = ServiceController.GetServices();
+
+                foreach (var item in processes.Where(i => i.ToLower().Contains("sql")))
+                {
+                    foreach (var server in servers)
+                    {
+                        var sc = services.FirstOrDefault(i => i.ServiceName.Contains(item));
+
+		                if(sc != null && sc.Status == ServiceControllerStatus.Running)
+                        {
+                            sqlServers.Add(sqlServers.Count.ToString(), server + "\\" + item);
+                        }
+	                    
+                    }
+
+                }
+            }
+
+            return sqlServers;
+        }
+
+        private string GetCurrentUser()
+        {
+            return System.Security.Principal.WindowsIdentity.GetCurrent().Name;
         }
     }
 }

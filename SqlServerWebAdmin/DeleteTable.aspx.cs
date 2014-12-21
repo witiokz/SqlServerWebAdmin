@@ -9,31 +9,14 @@ using System.Web.UI.WebControls;
 
 namespace SqlServerWebAdmin
 {
-    public partial class RenameTable : System.Web.UI.Page
+    public partial class DeleteTable : System.Web.UI.Page
     {
-        public RenameTable()
+        public DeleteTable()
         {
             Page.Init += new System.EventHandler(Page_Init);
         }
 
         protected void Page_Load(object sender, System.EventArgs e)
-        {
-            ErrorCreatingLabel.Visible = false;
-
-            if (!IsPostBack)
-                TableNameTextBox.Text = Request["table"];
-        }
-
-        protected void Page_Init(object sender, EventArgs e)
-        {
-            if (Page.User.Identity.IsAuthenticated)
-            {
-                Page.ViewStateUserKey = Page.Session.SessionID;
-            }
-
-        }
-
-        protected void RenameButton_Click(object sender, System.EventArgs e)
         {
             Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
@@ -48,6 +31,23 @@ namespace SqlServerWebAdmin
 
             Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
+            DatabaseNameLabel.Text = database.Name;
+            TableNameLabel.Text = Server.HtmlEncode(Request["table"]);
+            server.Disconnect();
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            if (Page.User.Identity.IsAuthenticated)
+            {
+                Page.ViewStateUserKey = Page.Session.SessionID;
+            }
+            
+        }
+
+        protected void YesButton_Click(object sender, System.EventArgs e)
+        {
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
@@ -57,6 +57,8 @@ namespace SqlServerWebAdmin
                 //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
+
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
             Microsoft.SqlServer.Management.Smo.Table table = database.Tables[Request["table"]];
             if (table == null)
@@ -68,30 +70,19 @@ namespace SqlServerWebAdmin
                 return;
             }
 
-            // Rename the table
-            try
-            {
-                table.Name = TableNameTextBox.Text;
+            // Delete the table
+            table.Drop();
 
-                // If successful, disconnect
-                server.Disconnect();
+            server.Disconnect();
 
-                // Redirect to info page
-                Response.Redirect(String.Format("tables.aspx?database={0}", Server.UrlEncode(Request["database"])));
-            }
-            catch (Exception ex)
-            {
-                ErrorCreatingLabel.Visible = true;
-                ErrorCreatingLabel.Text = "There was an error renaming the table:<br>" + Server.HtmlEncode(ex.Message).Replace("\n", "<br>");
-
-                server.Disconnect();
-            }
+            // Redirect to info page
+            Response.Redirect("tables.aspx?database=" + Server.UrlEncode(Request["database"]));
         }
 
-        protected void CancelButton_Click(object sender, System.EventArgs e)
+        protected void NoButton_Click(object sender, System.EventArgs e)
         {
             // Redirect to info page
-            Response.Redirect(String.Format("tables.aspx?database={0}", Server.UrlEncode(Request["database"])));
+            Response.Redirect("tables.aspx?database=" + Server.UrlEncode(Request["database"]));
         }
     }
 }

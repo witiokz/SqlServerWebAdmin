@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace SqlServerWebAdmin
     {
         protected void Create_Click(object sender, EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
                 server.Connect();
@@ -23,8 +24,8 @@ namespace SqlServerWebAdmin
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
-            SqlDatabase database = SqlDatabase.CurrentDatabase(server);
-            SqlUser user = database.Users.Add(Logins.SelectedValue, Username.Text.Trim());
+            Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
+            //User user = database.Users.Add(Logins.SelectedValue, Username.Text.Trim());
 
             server.Disconnect();
             Response.Redirect("EditDatabaseUser.aspx?database=" + Server.UrlEncode(Request.Params["database"]) + "&user=" + Server.UrlEncode(Username.Text.Trim()));
@@ -34,7 +35,7 @@ namespace SqlServerWebAdmin
         {
             if (!Page.IsPostBack)
             {
-                SqlServer server = SqlServer.CurrentServer;
+                Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
                 try
                 {
                     server.Connect();
@@ -45,14 +46,14 @@ namespace SqlServerWebAdmin
                     Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
                 }
 
-                SqlDatabase database = SqlDatabase.CurrentDatabase(server);
+                Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
                 Logins.DataSource = server.Logins;
                 Logins.DataBind();
 
 
                 // Remove existing users from the Logins selection
-                foreach (SqlUser user in database.Users)
+                foreach (User user in database.Users)
                 {
                     ListItem item = Logins.Items.FindByValue(user.Login);
                     if (item != null)

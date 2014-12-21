@@ -1,10 +1,12 @@
-﻿using SqlAdmin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
+using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 
 namespace SqlServerWebAdmin
 {
@@ -26,7 +28,7 @@ namespace SqlServerWebAdmin
             if (!IsValid)
                 return;
 
-            SqlServer server = SqlServer.CurrentServer;
+
 
             // Create the database
 
@@ -34,9 +36,11 @@ namespace SqlServerWebAdmin
 
             bool success = true;
 
+            Server server = null;
             try
             {
-                server.Connect();
+                server = DbUtlity.Connect();
+                server.ConnectionContext.Connect();
             }
             catch (System.Exception ex)
             {
@@ -49,13 +53,14 @@ namespace SqlServerWebAdmin
             {
                 this.ErrorCreatingLabel.Visible = true;
                 this.ErrorCreatingLabel.Text = "A database with this name already exists.";
-                server.Disconnect();
+                DbUtlity.Disconnect(server);
                 return;
             }
 
             try
             {
-                SqlDatabase newDatabase = server.Databases.Add(DatabaseNameTextBox.Text);
+                Database newDatabase = new Database(server, DatabaseNameTextBox.Text);
+                newDatabase.Create();
             }
             catch (Exception ex)
             {

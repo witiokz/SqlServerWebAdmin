@@ -1,4 +1,4 @@
-﻿using SqlAdmin;
+﻿using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace SqlServerWebAdmin.Toolbars
         protected void Page_Load(object sender, System.EventArgs e)
         {
 
-            string serverName = SqlServer.CurrentServer.Name;
+            string serverName = AdminUser.CurrentUser.Server;
 
             ServerNameHyperLink.NavigateUrl = "../databases.aspx";
             ServerNameHyperLink.Text = Server.HtmlEncode(serverName);

@@ -60,6 +60,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
@@ -193,6 +194,8 @@
     <Content Include="DatabaseRoles.aspx" />
     <Content Include="Databases.aspx" />
     <Content Include="DatabaseUsers.aspx" />
+    <Content Include="DeleteTable.aspx" />
+    <Content Include="EditColumn.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Export.aspx" />
     <Content Include="FileProperties.ascx" />
@@ -550,6 +553,20 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="DeleteTable.aspx.cs">
+      <DependentUpon>DeleteTable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DeleteTable.aspx.designer.cs">
+      <DependentUpon>DeleteTable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditColumn.aspx.cs">
+      <DependentUpon>EditColumn.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditColumn.aspx.designer.cs">
+      <DependentUpon>EditColumn.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Error.aspx.cs">
       <DependentUpon>Error.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -701,6 +718,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryDatabase.aspx.cs">
       <DependentUpon>QueryDatabase.aspx</DependentUpon>
@@ -818,12 +836,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SqlAdmin\SqlAdmin.csproj">
-      <Project>{b02b97f6-ab1b-4f01-8ec6-67140945b542}</Project>
-      <Name>SqlAdmin</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

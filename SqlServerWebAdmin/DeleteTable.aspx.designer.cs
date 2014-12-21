@@ -7,19 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SqlWebAdmin {
+namespace SqlServerWebAdmin {
     
     
-    public partial class Login {
-        
-        /// <summary>
-        /// WebForm1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm WebForm1;
+    public partial class DeleteTable {
         
         /// <summary>
         /// HelpLogout control.
@@ -31,93 +22,84 @@ namespace SqlWebAdmin {
         protected global::SqlServerWebAdmin.Toolbars.helplogouttoolbar HelpLogout;
         
         /// <summary>
-        /// LogoutInfoLabel control.
+        /// ServerLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LogoutInfoLabel;
+        protected global::SqlServerWebAdmin.Toolbars.serverlocation ServerLocation;
         
         /// <summary>
-        /// LoginInfoLabel control.
+        /// DatabaseLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LoginInfoLabel;
+        protected global::SqlServerWebAdmin.Toolbars.databaselocation DatabaseLocation;
         
         /// <summary>
-        /// SqlServerDLL control.
+        /// TableLocation control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList SqlServerDLL;
+        protected global::SqlServerWebAdmin.Toolbars.tablelocation TableLocation;
         
         /// <summary>
-        /// lblAuth control.
+        /// ServerToolbar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAuth;
+        protected global::SqlServerWebAdmin.Toolbars.servertoolbar ServerToolbar;
         
         /// <summary>
-        /// AuthRadioButtonList control.
+        /// DatabaseToolbar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList AuthRadioButtonList;
+        protected global::SqlServerWebAdmin.Toolbars.databasetoolbar DatabaseToolbar;
         
         /// <summary>
-        /// UsernameTextBox control.
+        /// TableNameLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox UsernameTextBox;
+        protected global::System.Web.UI.WebControls.Label TableNameLabel;
         
         /// <summary>
-        /// UsernameRequiredFieldValidator control.
+        /// DatabaseNameLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator UsernameRequiredFieldValidator;
+        protected global::System.Web.UI.WebControls.Label DatabaseNameLabel;
         
         /// <summary>
-        /// PasswordTextBox control.
+        /// YesButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox PasswordTextBox;
+        protected global::System.Web.UI.WebControls.Button YesButton;
         
         /// <summary>
-        /// LoginButton control.
+        /// NoButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button LoginButton;
-        
-        /// <summary>
-        /// ErrorLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ErrorLabel;
+        protected global::System.Web.UI.WebControls.Button NoButton;
     }
 }

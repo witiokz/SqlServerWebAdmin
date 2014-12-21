@@ -1,4 +1,5 @@
-﻿using SqlAdmin;
+﻿using Microsoft.SqlServer.Management.Smo;
+using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,8 +14,8 @@ namespace SqlServerWebAdmin
     {
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            SqlServer server = SqlServer.CurrentServer;
-            SqlAdmin.SqlLogin login;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
+            Microsoft.SqlServer.Management.Smo.Login login;
             try
             {
                 server.Connect();
@@ -24,7 +25,7 @@ namespace SqlServerWebAdmin
                 //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
-            SqlLoginCollection logins = server.Logins;
+            LoginCollection logins = server.Logins;
             server.Disconnect();
 
             // Create DataSet from list of databases
@@ -44,8 +45,8 @@ namespace SqlServerWebAdmin
                     new object[] {
                         Server.HtmlEncode(login.Name), 
                         Server.HtmlEncode(login.LoginType.ToString()),
-                        Server.HtmlEncode(login.NTLoginAccessType.ToString()),
-                        Server.HtmlEncode(login.Database.ToString()),
+                        //Server.HtmlEncode(login.NTLoginAccessType.ToString()),
+                        //Server.HtmlEncode(login.ToString()),
                         Server.HtmlEncode(login.LanguageAlias.ToString()),}
                 );
             }
