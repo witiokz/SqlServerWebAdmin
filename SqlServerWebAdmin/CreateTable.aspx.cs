@@ -60,6 +60,10 @@ namespace SqlServerWebAdmin
                 try
                 {
                     dummyTable = new Microsoft.SqlServer.Management.Smo.Table(database, TableNameTextBox.Text);
+
+                    Column colName = new Column(dummyTable, "ID", DataType.VarChar(50));
+                    colName.Nullable = true;
+                    dummyTable.Columns.Add(colName);
                     dummyTable.Create();
                 }
                 catch (Exception ex)

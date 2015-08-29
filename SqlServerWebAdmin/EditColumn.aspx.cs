@@ -3,6 +3,7 @@ using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -35,6 +36,9 @@ namespace SqlServerWebAdmin
             if (!IsPostBack)
             {
                 DataLossWarningLabel.Visible = false;
+
+                DataTypeDropdownlist.DataSource = Enum.GetValues(typeof(SqlDataType));
+                DataTypeDropdownlist.DataBind();
 
                 // If column isn't specified in request, that means we're adding a new column, not editing an existing one
                 if (Request["column"] == null || Request["column"].Length == 0)
@@ -108,12 +112,13 @@ namespace SqlServerWebAdmin
                     // Initialize column editor
                     PrimaryKeyCheckbox.Checked = column.InPrimaryKey;
                     ColumnNameTextbox.Text = column.Name;
-                    //DataTypeDropdownlist.SelectedIndex = DataTypeDropdownlist.Items.IndexOf(new ListItem(columnInfo.DataType));
-                    //LengthTextbox.Text = Convert.ToString(columnInfo.le);
+                    OriginalName.Value = column.Name;
+                    DataTypeDropdownlist.SelectedIndex = DataTypeDropdownlist.Items.IndexOf(new ListItem(columnInfo.DataType.SqlDataType.ToString()));
+                    LengthTextbox.Text = Convert.ToString(columnInfo.DataType.MaximumLength);
                     AllowNullCheckbox.Checked = columnInfo.Nullable;
                     DefaultValueTextbox.Text = columnInfo.Default;
-                    //PrecisionTextbox.Text = Convert.ToString(columnInfo.Precision);
-                    //ScaleTextbox.Text = Convert.ToString(columnInfo.Scale);
+                    PrecisionTextbox.Text = Convert.ToString(columnInfo.DataType.NumericPrecision);
+                    ScaleTextbox.Text = Convert.ToString(columnInfo.DataType.NumericScale);
                     IdentityCheckBox.Checked = columnInfo.Identity;
                     IdentitySeedTextbox.Text = Convert.ToString(columnInfo.IdentitySeed);
                     IdentityIncrementTextbox.Text = Convert.ToString(columnInfo.IdentityIncrement);
@@ -148,21 +153,49 @@ namespace SqlServerWebAdmin
             }
             catch (System.Exception ex)
             {
-                //Response.Redirect("Error.asp9x?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
             Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
-            // Parse user input and stick it into ColumnInfo
-            Column columnInfo = new Column();
-            columnInfo.Identity = PrimaryKeyCheckbox.Checked;
-            columnInfo.Name = ColumnNameTextbox.Text;
-            //columnInfo.DataType = DataType. DataTypeDropdownlist.SelectedItem.Text;
 
+
+            Microsoft.SqlServer.Management.Smo.Table table = null;
+            if (!database.Tables.Contains(Request["table"]))
+            {
+                table = new Microsoft.SqlServer.Management.Smo.Table(database, Request["table"]);
+            }
+            else
+            {
+                table = database.Tables.Cast<Microsoft.SqlServer.Management.Smo.Table>().FirstOrDefault( i => i.Name == Request["table"]);
+            }
+            
+
+            
+            // Parse user input and stick it into ColumnInfo
+            var type = DataTypeDropdownlist.SelectedItem.Value;
+            SqlDataType sqlDataType = (SqlDataType)Enum.Parse(typeof(SqlDataType), type);
+            Column columnInfo = table.Columns.Cast<Column>().FirstOrDefault(i => i.Name == OriginalName.Value);
+
+            if (columnInfo == null)
+            {
+                columnInfo = new Column(table, ColumnNameTextbox.Text, new DataType(sqlDataType));
+                columnInfo.Name = ColumnNameTextbox.Text;
+                columnInfo.Default = DefaultValueTextbox.Text;
+            }
+            else
+            {
+                columnInfo.Rename(ColumnNameTextbox.Text);
+                columnInfo.DataType = new DataType(sqlDataType);
+            }
+
+                              
+            columnInfo.Identity = PrimaryKeyCheckbox.Checked;
+           
             try
             {
-                //columnInfo.Size = Convert.ToInt32(LengthTextbox.Text);
+                columnInfo.DataType.MaximumLength = Convert.ToInt32(LengthTextbox.Text);
+               
             }
             catch
             {
@@ -173,11 +206,11 @@ namespace SqlServerWebAdmin
             }
 
             columnInfo.Nullable = AllowNullCheckbox.Checked;
-            columnInfo.Default = DefaultValueTextbox.Text;
+            
 
             try
             {
-                //columnInfo.Precision = Convert.ToInt32(PrecisionTextbox.Text);
+                columnInfo.DataType.NumericPrecision = Convert.ToInt32(PrecisionTextbox.Text);
             }
             catch
             {
@@ -189,7 +222,7 @@ namespace SqlServerWebAdmin
 
             try
             {
-                //columnInfo.Scale = Convert.ToInt32(ScaleTextbox.Text);
+                columnInfo.DataType.NumericScale =  Convert.ToInt32(ScaleTextbox.Text);
             }
             catch
             {
@@ -227,20 +260,20 @@ namespace SqlServerWebAdmin
 
             //columnInfo.IsRowGuid = IsRowGuidCheckBox.Checked;
 
-            Microsoft.SqlServer.Management.Smo.Table table = database.Tables[Request["table"]];
+            
 
             // First check if the table exists or not
             // If it doesn't exist, that means we are adding the first column of a new table
             // If it does exist, then either we are adding a new column to an existing table
             //   or we are editing an existing column in an existing table
 
-            if (table == null)
+            if (!database.Tables.Contains(Request["table"]))
             {
                 // Table does not exist - create a new table and add the new column
                 try
                 {
-                    Column[] columnInfos = new Column[1] { columnInfo };
-                    //table = new Microsoft.SqlServer.Management.Smo.Table(); database.Tables.Add(Request["table"], columnInfos);
+                    table.Columns.Add(columnInfo);
+                    table.Create();
                 }
                 catch (Exception ex)
                 {
@@ -269,6 +302,7 @@ namespace SqlServerWebAdmin
                     try
                     {
                         table.Columns.Add(columnInfo);
+                        table.Alter();
                     }
                     catch (Exception ex)
                     {
@@ -287,10 +321,10 @@ namespace SqlServerWebAdmin
                     // Simply set the column info - internally the table gets recreated
                     try
                     {
-                        //table.Columns[originalColumnName] = columnInfo;
-
-                        
-                        
+                        columnInfo.Drop();
+                        table.Columns.Add(columnInfo);
+                        table.Alter();
+                        //columnInfo.Alter();   
                     }
                     catch (Exception ex)
                     {

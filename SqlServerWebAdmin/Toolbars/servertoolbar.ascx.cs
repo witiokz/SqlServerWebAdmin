@@ -9,7 +9,7 @@ namespace SqlServerWebAdmin.Toolbars
 {
     public partial class servertoolbar : System.Web.UI.UserControl
     {
- private string selected = "";
+        private string selected = "";
 
         public string Selected
         {
@@ -30,33 +30,16 @@ namespace SqlServerWebAdmin.Toolbars
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            // Initialize links
-            DatabasesHyperLink.NavigateUrl = "../databases.aspx";
-            ImportHyperLink.NavigateUrl = "../import.aspx";
-            ExportHyperLink.NavigateUrl = "../export.aspx";
-            SecurityHyperLink.NavigateUrl = "../security.aspx";
+        }
 
-            switch (selected)
+        protected string CheckLink(string link)
+        {
+            if(string.IsNullOrEmpty(selected))
             {
-                case "databases":
-                    DatabasesTd.Attributes["class"] = "selectedLink";
-                    DatabasesHyperLink.Attributes.Remove("onMouseOver");
-                    break;
-                case "import":
-                    ImportTd.Attributes["class"] = "selectedLink";
-                    ImportHyperLink.Attributes.Remove("onMouseOver");
-                    break;
-                case "export":
-                    ExportTd.Attributes["class"] = "selectedLink";
-                    ExportHyperLink.Attributes.Remove("onMouseOver");
-                    break;
-                case "security":
-                    SecurityTd.Attributes["class"] = "selectedLink";
-                    SecurityHyperLink.Attributes.Remove("onMouseOver");
-                    break;
+                selected = Request.FilePath.Trim('/').Replace(".aspx", "");
             }
 
-            Page.RegisterClientScriptBlock("Global_Script", "<script language=javascript src=Global.js></script>");
+            return (selected == link) ? "selectedLink" : ""; 
         }
 
         protected void Page_Init(object sender, EventArgs e)

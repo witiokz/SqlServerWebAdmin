@@ -71,7 +71,7 @@ namespace SqlServerWebAdmin
             // Rename the table
             try
             {
-                table.Name = TableNameTextBox.Text;
+                table.Rename(TableNameTextBox.Text);
 
                 // If successful, disconnect
                 server.Disconnect();

@@ -72,14 +72,14 @@ namespace SqlServerWebAdmin
                     logins = server.Logins;
                     try
                     {
-                        /*Microsoft.SqlServer.Management.Smo.Login newLogin = logins.Add(
-                            LoginName.Text.Trim(),
-                            (SqlLoginType)Enum.Parse(typeof(SqlLoginType), AuthType.SelectedValue),
-                            Password.Text.Trim()
-                            );*/
-
+                        var login = new Microsoft.SqlServer.Management.Smo.Login(server, LoginName.Text.Trim());
+                        login.LoginType = (LoginType)Enum.Parse(typeof(LoginType), AuthType.SelectedValue);
+                        login.Create();
+                        logins.Add(login);
+                        login.ChangePassword(Password.Text.Trim());
+                        
                         // Redirect user to the edit screen so they can edit more properties
-                        //Response.Redirect("EditServerLogin.aspx?Login=" + Server.UrlEncode(newLogin.Name));
+                        Response.Redirect("EditServerLogin.aspx?Login=" + Server.UrlEncode(login.Name));
                     }
                     catch (Exception ex)
                     {

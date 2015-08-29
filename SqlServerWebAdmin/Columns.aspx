@@ -120,9 +120,9 @@
                                             </tr>
                                         </table>
                                         <br>
-                                        <asp:GridView ID="ColumnsDataGrid" runat="server" Border="0" AutoGenerateColumns="False"
+                                       <asp:DataGrid ID="ColumnsDataGrid" runat="server" Border="0" AutoGenerateColumns="False"
                                             GridLines="None" Width="100%" CellPadding="4" CellSpacing="1">
-                                           <%-- <HeaderStyle CssClass="tableHeader"></HeaderStyle>
+                                            <HeaderStyle CssClass="tableHeader"></HeaderStyle>
                                             <ItemStyle CssClass="tableItems"></ItemStyle>
                                             <Columns>
                                                 <asp:TemplateColumn HeaderText="Key">
@@ -195,8 +195,8 @@
                                                             NavigateUrl='<%# String.Format("deletecolumn.aspx?database={0}&table={1}&column={2}", Server.UrlEncode(Request["database"]), Server.UrlEncode(Request["table"]), DataBinder.Eval(Container.DataItem, "encodedname")) %>'></asp:HyperLink>
                                                     </ItemTemplate>
                                                 </asp:TemplateColumn>
-                                            </Columns>--%>
-                                        </asp:GridView>
+                                            </Columns>
+                                        </asp:DataGrid>
                                         <asp:Label ID="NoColumnsLabel" runat="server" EnableViewState="False" Font-Bold="true"
                                             Font-Size="10">There are no columns to display.</asp:Label>
                                     </td>

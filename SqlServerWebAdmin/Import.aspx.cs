@@ -1,6 +1,7 @@
 ﻿using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -46,8 +47,23 @@ namespace SqlServerWebAdmin
 
             try
             {
-                // No need for connect/disconnect since Query() uses ADO.NET, not DMO
-                //server.query(q);
+                // No need fo9r connect/disconnect since Query() uses ADO.NET, not DMO
+                //server.(q);
+
+                var strConnString = ""; //server.Configuration. System.Configuration.ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
+                using(SqlConnection con = new SqlConnection(strConnString))
+                {
+                    con.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(q))
+                    {
+                        cmd.Connection = con;
+                        cmd.CommandType = CommandType.Text;
+                        cmd.ExecuteNonQuery();
+
+                    }
+                }
+
                 ImportSuccessLabel.Visible = true;
             }
             catch (SqlException ex)

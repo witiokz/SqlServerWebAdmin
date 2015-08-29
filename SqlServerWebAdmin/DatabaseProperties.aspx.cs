@@ -19,6 +19,7 @@ namespace SqlServerWebAdmin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            throw new Exception("not implemented");
             Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
 
             try
@@ -92,8 +93,8 @@ namespace SqlServerWebAdmin
             {
                 Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
-                //DataFileProperties.Properties = database.;
-                //LogFileProperties.Properties = database.;
+                //DataFileProperties.Properties = props.DataFile;
+                //LogFileProperties.Properties = props.LogFile;
             }
             catch (System.Runtime.InteropServices.COMException ex)
             // Thrown if GetDatabaseProperties fails due to lack of permissions
@@ -112,7 +113,7 @@ namespace SqlServerWebAdmin
             }
         }
 
-        /*protected void ApplyButton_Click(object sender, System.EventArgs e)
+        protected void ApplyButton_Click(object sender, System.EventArgs e)
         {
             ErrorLabel.Visible = false;
 
@@ -130,14 +131,14 @@ namespace SqlServerWebAdmin
             Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
             // Grab data from the form
-            SqlDatabaseProperties props = null;
+            DatabaseProperties props = null;
 
-            //FileProperties dataFileProperties = null;
-            //SqlFileProperties logFileProperties = null;
+            FileProperties dataFileProperties = null;
+            FileProperties logFileProperties = null;
 
             try
             {
-                //dataFileProperties = DataFileProperties.Properties;
+                dataFileProperties = DataFileProperties;
             }
             catch (Exception ex)
             {
@@ -148,7 +149,7 @@ namespace SqlServerWebAdmin
 
             try
             {
-                logFileProperties = LogFileProperties.Properties;
+                logFileProperties = LogFileProperties;
             }
             catch (Exception ex)
             {
@@ -157,13 +158,16 @@ namespace SqlServerWebAdmin
                 return;
             }
 
-            props = new SqlDatabaseProperties(dataFileProperties, logFileProperties);
-            SqlDatabaseProperties origProps = database.GetDatabaseProperties();
+            //props = new DatabaseProperties(dataFileProperties, logFileProperties);
+            props = new DatabaseProperties();
+            //props = dataFileProperties;
+            //props.LogFileProperties = logFileProperties;
+            //DatabaseProperties origProps = database.Properties;
 
             // First validate input ourselves
             ArrayList errorList = new ArrayList();
 
-            if (props.DataFile.FileGrowth < 0)
+            /*if (props.DataFileProperties.FileGrowth < 0)
                 errorList.Add("Data file growth must be positive");
 
             if (props.DataFile.MaximumSize < -1)
@@ -188,12 +192,12 @@ namespace SqlServerWebAdmin
                 ErrorLabel.Text += "</ul>";
 
                 return;
-            }
+            }*/
 
             // Try to set properties
             try
             {
-                database.SetDatabaseProperties(props);
+                //database = props;
             }
             catch (Exception ex)
             {
@@ -206,12 +210,12 @@ namespace SqlServerWebAdmin
 
             // Only reload data if there were no errors
             // Get database properties and fill in their info
-            props = database.GetDatabaseProperties();
+            //props = database.GetDatabaseProperties();
 
-            DataFileProperties.Properties = props.DataFile;
-            LogFileProperties.Properties = props.LogFile;
+            //DataFileProperties.Properties = props.DataFile;
+            //LogFileProperties.Properties = props.LogFile;
 
             server.Disconnect();
-        }*/
+        }
     }
 }

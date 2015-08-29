@@ -25,7 +25,10 @@ namespace SqlServerWebAdmin
             }
 
             Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
-            //User user = database.Users.Add(Logins.SelectedValue, Username.Text.Trim());
+            User user = new User(database, Username.Text.Trim());
+            user.Login = Logins.SelectedValue;
+            user.Create();
+            //database.Users.Add(Logins.SelectedValue, Username.Text.Trim());
 
             server.Disconnect();
             Response.Redirect("EditDatabaseUser.aspx?database=" + Server.UrlEncode(Request.Params["database"]) + "&user=" + Server.UrlEncode(Username.Text.Trim()));

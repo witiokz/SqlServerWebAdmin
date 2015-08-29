@@ -68,7 +68,9 @@ namespace SqlServerWebAdmin
                     for (int i = 0; i < columns.Count; i++)
                     {
                         Column columnInfo = columns[i];
-                       // ds.Tables[0].Rows.Add(new object[] { columnInfo.InPrimaryKey, columnInfo.Identity, Server.HtmlEncode(columnInfo.Name), Server.HtmlEncode(columnInfo.DataType), columnInfo.Size, columnInfo.Precision, columnInfo.Scale, columnInfo.Nulls, Server.HtmlEncode(columnInfo.DefaultValue), Server.UrlEncode(columnInfo.Name) });
+                        ds.Tables[0].Rows.Add(new object[] { columnInfo.InPrimaryKey, columnInfo.Identity, Server.HtmlEncode(columnInfo.Name), Server.HtmlEncode(columnInfo.DataType.ToString()), 
+                            columnInfo.DataType.MaximumLength, columnInfo.DataType.NumericPrecision, columnInfo.DataType.NumericScale,
+                            columnInfo.Nullable, Server.HtmlEncode(columnInfo.Default), Server.UrlEncode(columnInfo.Name) });
                     }
                     this.ColumnsDataGrid.DataSource = ds;
                     this.ColumnsDataGrid.DataBind();
@@ -83,16 +85,16 @@ namespace SqlServerWebAdmin
                 }
                 else
                 {
-                    this.ColumnsDataGrid.Columns[2].Visible = false;
-                    this.ColumnsDataGrid.Columns[3].Visible = true;
-                    this.ColumnsDataGrid.Columns[8].Visible = true;
+                    //this.ColumnsDataGrid.Columns[2].Visible = false;
+                    //this.ColumnsDataGrid.Columns[3].Visible = true;
+                    //this.ColumnsDataGrid.Columns[8].Visible = true;
                 }
 
                 // If the table has only one column, do not allow delete
-                if (table.Columns.Count == 1)
-                    this.ColumnsDataGrid.Columns[9].Visible = false;
-                else
-                    this.ColumnsDataGrid.Columns[9].Visible = true;
+                //if (table.Columns.Count == 1)
+                //    this.ColumnsDataGrid.Columns[9].Visible = false;
+                //else
+                //    this.ColumnsDataGrid.Columns[9].Visible = true;
             }
             else
             {

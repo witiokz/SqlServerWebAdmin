@@ -128,7 +128,10 @@
                                                         <HeaderStyle Wrap="False" HorizontalAlign="Left"></HeaderStyle>
                                                         <ItemStyle Wrap="False" HorizontalAlign="Left"></ItemStyle>
                                                     </asp:BoundColumn>
-                                                    <asp:HyperLinkColumn Text="Add or Edit Logins" DataNavigateUrlField="Name" DataNavigateUrlFormatString="EditServerRole.aspx?Role={0}" />
+                                                    <asp:HyperLinkColumn Text="Add or Edit Logins" DataNavigateUrlField="FullName"
+                                                         DataNavigateUrlFormatString="EditServerRole.aspx?Role={0}" />
+
+
                                                 </Columns>
                                             </asp:DataGrid>
                                         </td>

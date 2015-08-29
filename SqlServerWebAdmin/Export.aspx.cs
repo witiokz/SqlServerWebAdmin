@@ -1,12 +1,17 @@
-﻿using Microsoft.SqlServer.Management.Smo;
+﻿using Microsoft.SqlServer.Management.Sdk.Sfc;
+using Microsoft.SqlServer.Management.Smo;
+using Microsoft.SqlServer.Management.Common;
 using SqlServerWebAdmin.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Collections.Specialized;
 
 namespace SqlServerWebAdmin
 {
@@ -40,20 +45,6 @@ namespace SqlServerWebAdmin
             }
         }
 
-        private bool IsValidChar(char c)
-        {
-            int i = Convert.ToInt32(c);
-            int charA = Convert.ToInt32('A');
-            int chara = Convert.ToInt32('a');
-            int char0 = Convert.ToInt32('0');
-            if ((i >= charA && i <= charA + 26) ||
-                (i >= chara && i <= chara + 26) ||
-                (i >= char0 && i <= char0 + 10))
-                return true;
-            else
-                return false;
-        }
-
         protected void ExportButton_Click(object sender, System.EventArgs e)
         {
             // Do the export - this will just pop open a Save As dialog box
@@ -64,6 +55,14 @@ namespace SqlServerWebAdmin
             bool scriptTableData = this.ScriptTableDataCheckBox.Checked;
             bool scriptStoredProcedures = this.ScriptStoredProceduresCheckBox.Checked;
             bool scriptComments = this.ScriptCommentsCheckBox.Checked;
+
+            // Set the filename to consist of only valid filename chars: [A-Za-z0-9]
+            string filename = "";
+            for (int i = 0; i < databaseName.Length; i++)
+            {
+                if (IsValidChar(databaseName[i]))
+                    filename += databaseName[i];
+            }
 
             Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
 
@@ -101,6 +100,49 @@ namespace SqlServerWebAdmin
             if (scriptComments) scriptResult.Append("comments ");
             scriptResult.Append(" */\r\n\r\n");
 
+            Scripter scr = new Scripter(server);
+            server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.View), "IsSystemObject");
+
+            ScriptingOptions options = new ScriptingOptions();
+            options.DriAll = true;
+            options.ClusteredIndexes = true;
+            options.Default = true;
+            options.Indexes = true;
+            options.IncludeHeaders = true;
+
+            options.AppendToFile = false;
+            options.TargetServerVersion = SqlServerVersion.Version100;
+            options.IncludeIfNotExists = true;
+            options.Permissions = true;
+            options.ExtendedProperties = true;
+
+            options.ScriptDrops = false;
+            options.ScriptSchema = scriptTableSchema;
+            //options.ScriptData = scriptTableData;
+
+            //options.NoCollation = true;
+            //options.NoFileGroup = true;
+            //options.NoIdentities = true;
+            scr.ScriptingProgress += (q, w) => { var t = 1; };
+            scr.Options = options;
+
+            Microsoft.SqlServer.Management.Smo.Table[] tbls = new Microsoft.SqlServer.Management.Smo.Table[database.Tables.Count];
+            database.Tables.CopyTo(tbls, 0);
+            scr.Script(tbls);
+
+            options.AppendToFile = true;
+            Microsoft.SqlServer.Management.Smo.View[] view = new Microsoft.SqlServer.Management.Smo.View[1];
+            for (int idx = 0; idx < database.Views.Count; idx++)
+            {
+                if (!database.Views[idx].IsSystemObject)
+                {
+                    view[0] = database.Views[idx];
+                    scr.Script(view);
+                }
+            }
+
+
+
             // Script flow:
             // DROP and CREATE database
             // use [database]
@@ -113,35 +155,74 @@ namespace SqlServerWebAdmin
             // CREATE sprocs
 
             // Drop and create database
-            /*if (scriptDatabase)
-                scriptResult.Append(database.Script(
-                    SqlScriptType.Create |
-                    (scriptDrop ? SqlScriptType.Drop : 0) |
-                    (scriptComments ? SqlScriptType.Comments : 0)));
-
-            // Use database
-            scriptResult.Append(String.Format("\r\nuse [{0}]\r\nGO\r\n\r\n", databaseName));
-
-            // Drop stored procedures
-            if (scriptStoredProcedures && scriptDrop)
+            if (scriptDatabase)
             {
-                for (int i = 0; i < sprocs.Count; i++)
-                {
-                    if (sprocs[i].Propertie == SqlObjectType.User)
-                    {
-                        scriptResult.Append(sprocs[i].Script(SqlScriptType.Drop | (scriptComments ? SqlScriptType.Comments : 0)));
-                    }
-                }
+                scriptResult.Append(ScriptObject(new Urn[] { database.Urn }, scr));
             }
 
-            // Drop tables (this includes schemas and data)
-            if (scriptTableSchema && scriptDrop)
+            // Drop stored procedures
+            ////Drop tables (this includes schemas)
+            if (scriptDrop)
             {
-                for (int i = 0; i < tables.Count; i++)
+                Scripter scripter = new Scripter(server);
+                scripter.Options.ScriptDrops = true;
+
+                foreach (Microsoft.SqlServer.Management.Smo.Table tb in database.Tables)
                 {
-                    if (tables[i].TableType == SqlObjectType.User)
+                    if (!tb.IsSystemObject)
                     {
-                        scriptResult.Append(tables[i].ScriptSchema(SqlScriptType.Drop | (scriptComments ? SqlScriptType.Comments : 0)));
+                        scriptResult.Append(ScriptObject(new Urn[] { tb.Urn }, scripter));
+                    }
+                }
+
+
+                if (scriptTableSchema)
+                {
+                    server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.Table), "IsSystemObject");
+                    foreach (Microsoft.SqlServer.Management.Smo.Table tb in database.Tables)
+                    {
+                        if (!tb.IsSystemObject)
+                        {
+                            scriptResult.Append(ScriptObject(new Urn[] { tb.Urn }, scripter));
+                        }
+                    }
+                }
+                if (scriptStoredProcedures)
+                {
+                    server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.View),
+                                                "IsSystemObject");
+                    foreach (Microsoft.SqlServer.Management.Smo.View v in database.Views)
+                    {
+                        if (!v.IsSystemObject)
+                        {
+                            scriptResult.Append(ScriptObject(new Urn[] { v.Urn }, scripter));
+                        }
+                    }
+                }
+
+                if (scriptStoredProcedures)
+                {
+                    server.SetDefaultInitFields(typeof(UserDefinedFunction), "IsSystemObject");
+                    foreach (UserDefinedFunction udf in database.UserDefinedFunctions)
+                    {
+                        if (!udf.IsSystemObject)
+                        {
+                            scriptResult.Append(ScriptObject(new Urn[] { udf.Urn }, scripter));
+                        }
+                    }
+                }
+
+                // Create stored procedures
+                if (scriptStoredProcedures)
+                {
+                    server.SetDefaultInitFields(typeof(StoredProcedure), "IsSystemObject");
+
+                    foreach (StoredProcedure sp in database.StoredProcedures)
+                    {
+                        if (!sp.IsSystemObject)
+                        {
+                            scriptResult.Append(ScriptObject(new Urn[] { sp.Urn }, scripter));
+                        }
                     }
                 }
             }
@@ -149,12 +230,12 @@ namespace SqlServerWebAdmin
             // Create table schemas
             if (scriptTableSchema)
             {
-                // First create tables with no constraints
-                for (int i = 0; i < tables.Count; i++)
+                server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.Table), "IsSystemObject");
+                foreach (Microsoft.SqlServer.Management.Smo.Table tb in database.Tables)
                 {
-                    if (tables[i].TableType == SqlObjectType.User)
+                    if (!tb.IsSystemObject)
                     {
-                        scriptResult.Append(tables[i].ScriptSchema(SqlScriptType.Create | (scriptComments ? SqlScriptType.Comments : 0)));
+                        scriptResult.Append(ScriptObject(new Urn[] { tb.Urn }, scr));
                     }
                 }
             }
@@ -162,66 +243,57 @@ namespace SqlServerWebAdmin
             // Create table data
             if (scriptTableData)
             {
-                for (int i = 0; i < tables.Count; i++)
+                Scripter scripter = new Scripter(server);
+                scripter.Options.ScriptData = true ;
+                server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.Table), "IsSystemObject");
+
+                foreach (Microsoft.SqlServer.Management.Smo.Table table in database.Tables)
                 {
-                    if (tables[i].TableType == SqlObjectType.User)
+                    var script = scripter.EnumScript(new SqlSmoObject[] { table });
+                    foreach (var line in script)
+                        scriptResult.AppendLine(line);
+                }
+            }
+
+            if (scriptStoredProcedures)
+            {
+                server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.View),
+                                            "IsSystemObject");
+                foreach (Microsoft.SqlServer.Management.Smo.View v in database.Views)
+                {
+                    if (!v.IsSystemObject)
                     {
-                        scriptResult.Append(tables[i].ScriptData(scriptComments ? SqlScriptType.Comments : 0));
+                        scriptResult.Append(ScriptObject(new Urn[] { v.Urn }, scr));
                     }
                 }
             }
 
-            if (scriptTableSchema)
+            if (scriptStoredProcedures)
             {
-                // Add defaults, primary key, and checks
-                for (int i = 0; i < tables.Count; i++)
+                server.SetDefaultInitFields(typeof(UserDefinedFunction), "IsSystemObject");
+                foreach (UserDefinedFunction udf in database.UserDefinedFunctions)
                 {
-                    if (tables[i].TableType == SqlObjectType.User)
+                    if (!udf.IsSystemObject)
                     {
-                        scriptResult.Append(tables[i].ScriptSchema(SqlScriptType.Defaults | SqlScriptType.PrimaryKey | SqlScriptType.Checks | (scriptComments ? SqlScriptType.Comments : 0)));
+                        scriptResult.Append(ScriptObject(new Urn[] { udf.Urn }, scr));
                     }
                 }
+            }
 
-                // Add foreign keys
-                for (int i = 0; i < tables.Count; i++)
-                {
-                    if (tables[i].TableType == SqlObjectType.User)
-                    {
-                        scriptResult.Append(tables[i].ScriptSchema(SqlScriptType.ForeignKeys | (scriptComments ? SqlScriptType.Comments : 0)));
-                    }
-                }
+            // Create stored procedures
+            if (scriptStoredProcedures)
+            {
+                server.SetDefaultInitFields(typeof(StoredProcedure), "IsSystemObject");
 
-                // Add unique keys
-                for (int i = 0; i < tables.Count; i++)
+                foreach (StoredProcedure sp in database.StoredProcedures)
                 {
-                    if (tables[i].TableType == SqlObjectType.User)
+                    if (!sp.IsSystemObject)
                     {
-                        scriptResult.Append(tables[i].ScriptSchema(SqlScriptType.UniqueKeys | (scriptComments ? SqlScriptType.Comments : 0)));
-                    }
-                }
-
-                // Add indexes
-                for (int i = 0; i < tables.Count; i++)
-                {
-                    if (tables[i].TableType == SqlObjectType.User)
-                    {
-                        scriptResult.Append(tables[i].ScriptSchema(SqlScriptType.Indexes | (scriptComments ? SqlScriptType.Comments : 0)));
+                        scriptResult.Append(ScriptObject(new Urn[] { sp.Urn }, scr));
                     }
                 }
             }
             
-            // Create stored procedures
-            if (scriptStoredProcedures)
-            {
-                for (int i = 0; i < sprocs.Count; i++)
-                {
-                    if (sprocs[i].StoredProcedureType == SqlObjectType.User)
-                    {
-                        scriptResult.Append(sprocs[i].Script(SqlScriptType.Create | (scriptComments ? SqlScriptType.Comments : 0)));
-                    }
-                }
-            }
-             */
 
             server.Disconnect();
 
@@ -229,19 +301,41 @@ namespace SqlServerWebAdmin
             Response.ClearHeaders();
             Response.ClearContent();
 
-            // Set the filename to consist of only valid filename chars: [A-Za-z0-9]
-            string filename = "";
-            for (int i = 0; i < databaseName.Length; i++)
-            {
-                if (IsValidChar(databaseName[i]))
-                    filename += databaseName[i];
-            }
+
 
             // This header (RFC 1806) lets us set the suggested filename
             Response.AddHeader("Content-Disposition", "attachment; filename=" + Server.UrlEncode(filename) + "_export.sql");
             Response.Write(scriptResult.ToString());
 
             Response.End();
+        }
+
+        private bool IsValidChar(char c)
+        {
+            int i = Convert.ToInt32(c);
+            int charA = Convert.ToInt32('A');
+            int chara = Convert.ToInt32('a');
+            int char0 = Convert.ToInt32('0');
+            if ((i >= charA && i <= charA + 26) ||
+                (i >= chara && i <= chara + 26) ||
+                (i >= char0 && i <= char0 + 10))
+                return true;
+            else
+                return false;
+        }
+
+        private string ScriptObject(Urn[] urns, Scripter scripter)
+        {
+            StringCollection sc = scripter.Script(urns);
+            StringBuilder sb = new StringBuilder();
+
+            foreach (string str in sc)
+            {
+                sb.Append(str + Environment.NewLine + "GO" +
+                  Environment.NewLine + Environment.NewLine);
+            }
+
+            return sb.ToString();
         }
     }
 }

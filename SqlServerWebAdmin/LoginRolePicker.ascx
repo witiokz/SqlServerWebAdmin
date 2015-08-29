@@ -1,4 +1,4 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="LoginRolePicker.ascx.cs" Inherits="SqlAdmin.Controls.ItemPicker" TargetSchema="http://schemas.microsoft.com/intellisense/ie5"%>
+<%@ Control Language="c#" AutoEventWireup="false" Codebehind="LoginRolePicker.ascx.cs" Inherits="SqlServerWebAdmin.ItemPicker" TargetSchema="http://schemas.microsoft.com/intellisense/ie5"%>
 <table border=0 cellspacing=0 cellpadding=0>
 	<tr>
 		<tr class="tableItems">

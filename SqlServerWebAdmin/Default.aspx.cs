@@ -27,6 +27,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Diagnostics;
+using Microsoft.SqlServer.Management.Smo.Wmi;
+using System.IO;
 
 namespace SqlWebAdmin
 {
@@ -147,11 +149,22 @@ namespace SqlWebAdmin
             else
             {
                 //Using SQL Server authentication
-                server.ConnectionContext.LoginSecure = false;
-                server.ConnectionContext.Login = UsernameTextBox.Text;
-                server.ConnectionContext.Password = PasswordTextBox.Text;
-                server.ConnectionContext.Connect();
-                useIntegrated = false;
+                try
+                {
+                    server.ConnectionContext.LoginSecure = false;
+                    server.ConnectionContext.Login = UsernameTextBox.Text;
+                    server.ConnectionContext.Password = PasswordTextBox.Text;
+                    server.ConnectionContext.Connect();
+                    connected = true;
+                    useIntegrated = false;
+                }
+                catch (Exception ex)
+                {
+                    ErrorLabel.Visible = true;
+                    ErrorLabel.Text = "here"  + ex.Message;
+                    return;
+                }
+
             }
 
             if (connected)
@@ -206,6 +219,18 @@ namespace SqlWebAdmin
             List<string> servers = new List<string>();
             var sqlServers = new Dictionary<string, string>();
 
+            if (dt.Rows.Count == 0)
+            {
+                var items = GetServersAlternative1();
+
+                foreach (var item in items)
+                {
+                    var row = dt.NewRow();
+                    row["Name"] = item;
+                    dt.Rows.Add(row);
+                }
+            }
+
             if (dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in dt.Rows)
@@ -216,48 +241,137 @@ namespace SqlWebAdmin
                     }
                     else
                     {
-                        servers.Add(dr["Name"].ToString());
+                        sqlServers.Add(sqlServers.Count.ToString(), dr["Name"].ToString());
                     }
                 }
             }
 
-            if (servers.Count > 0)
-            {
-                List<string> processes = new List<string>();
-                RegistryKey rk = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
-                String[] instances = (String[])rk.GetValue("InstalledInstances");
-                foreach (var instance in instances)
-                {
-                    processes.Add(instance);
-                }
+            //if (servers.Count > 0)
+            //{
+            //    List<string> processes = new List<string>();
+            //    RegistryKey rk = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
+            //    String[] instances = (String[])rk.GetValue("InstalledInstances");
+            //    foreach (var instance in instances)
+            //    {
+            //        processes.Add(instance);
+            //    }
 
-                foreach (var item in rk.GetSubKeyNames())
-                {
-                    if(!processes.Any(i => i.Contains(item)))
-                    {
-                        processes.Add(item);
-                    }
-                }
+            //    foreach (var item in rk.GetSubKeyNames())
+            //    {
+            //        if(!processes.Any(i => i.Contains(item)))
+            //        {
+            //            processes.Add(item);
+            //        }
+            //    }
 
-                var services = ServiceController.GetServices();
+            //    var services = ServiceController.GetServices();
 
-                foreach (var item in processes.Where(i => i.ToLower().Contains("sql")))
-                {
-                    foreach (var server in servers)
-                    {
-                        var sc = services.FirstOrDefault(i => i.ServiceName.Contains(item));
+            //    foreach (var item in processes.Where(i => i.ToLower().Contains("sql")))
+            //    {
+            //        foreach (var server in servers)
+            //        {
+            //            var sc = services.FirstOrDefault(i => i.ServiceName.Contains(item));
 
-		                if(sc != null && sc.Status == ServiceControllerStatus.Running)
-                        {
-                            sqlServers.Add(sqlServers.Count.ToString(), server + "\\" + item);
-                        }
+            //            if(sc != null && sc.Status == ServiceControllerStatus.Running)
+            //            {
+            //                sqlServers.Add(sqlServers.Count.ToString(), server + "\\" + item);
+            //            }
 	                    
-                    }
+            //        }
 
-                }
-            }
+            //    }
+            //}
 
             return sqlServers;
+        }
+
+        private List<string> GetServersAlternative1()
+        {
+            List<string> servers = new List<string>();
+
+            // Get servers from the registry (if any)
+            RegistryKey key = RegistryKey.OpenBaseKey(
+              Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry32);
+            key = key.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
+            object installedInstances = null;
+            if (key != null) { installedInstances = key.GetValue("InstalledInstances"); }
+            List<string> instances = null;
+            if (installedInstances != null) { instances = ((string[])installedInstances).ToList(); }
+            if (System.Environment.Is64BitOperatingSystem)
+            {
+                /* The above registry check gets routed to the syswow portion of 
+                 * the registry because we're running in a 32-bit app. Need 
+                 * to get the 64-bit registry value(s) */
+                key = RegistryKey.OpenBaseKey(
+                        Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry64);
+                key = key.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
+                installedInstances = null;
+                if (key != null) { installedInstances = key.GetValue("InstalledInstances"); }
+                string[] moreInstances = null;
+                if (installedInstances != null)
+                {
+                    moreInstances = (string[])installedInstances;
+                    if (instances == null)
+                    {
+                        instances = moreInstances.ToList();
+                    }
+                    else
+                    {
+                        instances.AddRange(moreInstances);
+                    }
+                }
+            }
+            foreach (string item in instances)
+            {
+                string name = System.Environment.MachineName;
+                if (item != "MSSQLSERVER") { name += @"\" + item; }
+                if (!servers.Contains(name.ToUpper())) { servers.Add(name.ToUpper()); }
+            }
+
+            return servers;
+        }
+
+        private string[] GetServersAlternative2()
+        {
+            var defaultMsSqlInstanceName = "MSSQLSERVER";
+
+            return new ManagedComputer()
+            .ServerInstances
+            .Cast<ServerInstance>()
+            .Select(instance => String.IsNullOrEmpty(instance.Name) || instance.Name == defaultMsSqlInstanceName ?
+            instance.Parent.Name : Path.Combine(instance.Parent.Name, instance.Name))
+            .ToArray();
+        }
+
+        private string[] GetServersAlternative3()
+        {
+            RegistryKey rk = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
+            String[] instances = (String[])rk.GetValue("InstalledInstances");
+
+            List<string> lstLocalInstances = new List<string>();
+
+            if (instances.Length > 0)
+            {
+                foreach (String element in instances)
+                {
+                    if (element == "MSSQLSERVER")
+                        lstLocalInstances.Add(System.Environment.MachineName);
+                    else
+                        lstLocalInstances.Add(System.Environment.MachineName + @"\" + element);
+                }
+            }
+
+            DataTable dt = SmoApplication.EnumAvailableSqlServers(false);
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    lstLocalInstances.Add(dr["Name"].ToString());
+                }
+            }
+
+            return lstLocalInstances.ToArray();
         }
 
         private string GetCurrentUser()

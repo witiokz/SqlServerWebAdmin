@@ -45,8 +45,8 @@ namespace SqlServerWebAdmin
                     new object[] {
                         Server.HtmlEncode(login.Name), 
                         Server.HtmlEncode(login.LoginType.ToString()),
-                        //Server.HtmlEncode(login.NTLoginAccessType.ToString()),
-                        //Server.HtmlEncode(login.ToString()),
+                        Server.HtmlEncode(login.WindowsLoginAccessType.ToString()),
+                        Server.HtmlEncode(login.DefaultDatabase.ToString()),
                         Server.HtmlEncode(login.LanguageAlias.ToString()),}
                 );
             }

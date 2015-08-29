@@ -78,10 +78,16 @@ namespace SqlServerWebAdmin
                 Microsoft.SqlServer.Management.Smo.Table table = tables[i];
 
                 // Only add objects that we want (system or user)
-                /*if ((table. && objectTypeFilter) > 0)
-                    ds.Tables[0].Rows.Add(new object[] { Server.HtmlEncode(table.Name), 
-                        Server.UrlEncode(table.Name), Server.HtmlEncode(table.Owner), 
-                        Server.HtmlEncode(table.TableType.ToString()), Server.HtmlEncode(table.CreateDate.ToString()), table.Rows });*/
+               if (!table.IsSystemObject || (table.IsSystemObject  && objectTypeFilter != SqlObjectType.User))
+                    ds.Tables[0].Rows.Add(new object[] 
+                    { 
+                        Server.HtmlEncode(table.Name), 
+                        Server.UrlEncode(table.Name), 
+                        Server.HtmlEncode(table.Owner), 
+                        Server.HtmlEncode(table.IsSystemObject ? "system" : ""),
+                        Server.HtmlEncode(table.CreateDate.ToString()),
+                        table.RowCount 
+                    });
             }
 
             // Show message if there are no tables, otherwise show datagrid

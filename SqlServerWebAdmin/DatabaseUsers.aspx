@@ -6,7 +6,7 @@
 <%@ Register TagPrefix="Toolbar" TagName="Server" Src="Toolbars/ServerToolbar.ascx" %>
 <%@ Register TagPrefix="Location" TagName="Server" Src="Toolbars/ServerLocation.ascx" %>
 <%@ Register TagPrefix="Location" TagName="Database" Src="Toolbars/DatabaseLocation.ascx" %>
-<%@ Import Namespace="SqlAdmin" %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <html>
 <head>
@@ -129,20 +129,20 @@
                                                             Name</HeaderTemplate>
                                                         <ItemTemplate>
                                                             <img src="images/user_ico.gif" align="absmiddle">
-                                                            <%#((SqlUser)Container.DataItem).Name%>
+                                                            <%#(Container.DataItem)%>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:BoundColumn HeaderText="Login Name" DataField="Login" />
                                                     <asp:BoundColumn HeaderText="Permit" DataField="HasDbAccess" />
                                                     <asp:TemplateColumn>
                                                         <ItemTemplate>
-                                                            <a href='EditDatabaseUser.aspx?database=<%=Request["database"]%>&user=<%#((SqlUser)Container.DataItem).Name%>'>
+                                                            <a href='EditDatabaseUser.aspx?database=<%=Request["database"]%>&user=<%#(Container.DataItem)%>'>
                                                                 Edit</a>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:TemplateColumn>
                                                         <ItemTemplate>
-                                                            <a href='DeleteDatabaseUser.aspx?database=<%=Request["database"]%>&user=<%#((SqlUser)Container.DataItem).Name%>'>
+                                                            <a href='DeleteDatabaseUser.aspx?database=<%=Request["database"]%>&user=<%#(Container.DataItem)%>'>
                                                                 Delete</a>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>

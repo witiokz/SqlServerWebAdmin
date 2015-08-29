@@ -137,6 +137,7 @@
                                                     <td class="databaseListItem" width="25">
                                                         &nbsp;</td>
                                                     <td class="databaseListItem">
+                                                        <asp:HiddenField ID="OriginalName" runat="server"></asp:HiddenField>
                                                         <asp:TextBox ID="ColumnNameTextbox" runat="server" Columns="15"></asp:TextBox>
                                                     </td>
                                                     <td class="databaseListItem">
@@ -152,31 +153,6 @@
                                                         &nbsp;</td>
                                                     <td class="databaseListItem">
                                                         <asp:DropDownList ID="DataTypeDropdownlist" runat="server">
-                                                            <asp:ListItem Value="bigint">bigint</asp:ListItem>
-                                                            <asp:ListItem Value="binary">binary</asp:ListItem>
-                                                            <asp:ListItem Value="bit">bit</asp:ListItem>
-                                                            <asp:ListItem Value="char" Selected="True">char</asp:ListItem>
-                                                            <asp:ListItem Value="datetime">datetime</asp:ListItem>
-                                                            <asp:ListItem Value="decimal">decimal</asp:ListItem>
-                                                            <asp:ListItem Value="float">float</asp:ListItem>
-                                                            <asp:ListItem Value="image">image</asp:ListItem>
-                                                            <asp:ListItem Value="int">int</asp:ListItem>
-                                                            <asp:ListItem Value="money">money</asp:ListItem>
-                                                            <asp:ListItem Value="nchar">nchar</asp:ListItem>
-                                                            <asp:ListItem Value="ntext">ntext</asp:ListItem>
-                                                            <asp:ListItem Value="numeric">numeric</asp:ListItem>
-                                                            <asp:ListItem Value="nvarchar">nvarchar</asp:ListItem>
-                                                            <asp:ListItem Value="real">real</asp:ListItem>
-                                                            <asp:ListItem Value="smalldatetime">smalldatetime</asp:ListItem>
-                                                            <asp:ListItem Value="smallint">smallint</asp:ListItem>
-                                                            <asp:ListItem Value="smallmoney">smallmoney</asp:ListItem>
-                                                            <asp:ListItem Value="sql_varient">sql_varient</asp:ListItem>
-                                                            <asp:ListItem Value="text">text</asp:ListItem>
-                                                            <asp:ListItem Value="timestamp">timestamp</asp:ListItem>
-                                                            <asp:ListItem Value="tinyint">tinyint</asp:ListItem>
-                                                            <asp:ListItem Value="uniqueidentifier">uniqueidentifier</asp:ListItem>
-                                                            <asp:ListItem Value="varbinary">varbinary</asp:ListItem>
-                                                            <asp:ListItem Value="varchar">varchar</asp:ListItem>
                                                         </asp:DropDownList>
                                                     </td>
                                                     <td class="databaseListItem">

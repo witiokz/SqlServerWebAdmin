@@ -93,7 +93,7 @@ namespace SqlServerWebAdmin
 
             try
             {
-                //tables = database.Query(QueryTextbox.Text);
+                tables = database.ExecuteWithResults(QueryTextbox.Text).Tables.Cast<DataTable>().ToArray();
             }
             catch (SqlException ex)
             {

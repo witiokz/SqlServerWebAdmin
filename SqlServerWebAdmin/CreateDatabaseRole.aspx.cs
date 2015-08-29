@@ -11,7 +11,7 @@ namespace SqlServerWebAdmin
 {
     public partial class CreateDatabaseRole : System.Web.UI.Page
     {
-        //protected ItemPicker RoleUsers;
+        protected ItemPicker RoleUsers;
         protected TextBox RolePassword;
 
         protected void CreateRole_Click(object sender, EventArgs e)

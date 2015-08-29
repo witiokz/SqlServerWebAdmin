@@ -60,6 +60,9 @@ namespace SqlServerWebAdmin
                 try
                 {
                     dummySproc = new StoredProcedure(database, SProcNameTextBox.Text); //database.StoredProcedures.Add(SProcNameTextBox.Text, "CREATE PROCEDURE [" + SProcNameTextBox.Text + "] AS\r\nGO");
+                    dummySproc.TextMode = false;
+                    //dummySproc.TextHeader = "";
+                    dummySproc.TextBody = "select * from sometable";
                     dummySproc.Create();
                 }
                 catch (Exception ex)

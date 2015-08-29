@@ -80,8 +80,15 @@ namespace SqlServerWebAdmin
                 StoredProcedure sproc = sprocs[i];
 
                 // Only add objects that we want (system or user)
-                //if ((sproc.StoredProcedureType & objectTypeFilter) > 0)
-                //    ds.Tables[0].Rows.Add(new object[] { Server.HtmlEncode(sproc.Name), Server.UrlEncode(sproc.Name), Server.HtmlEncode(sproc.Owner), Server.HtmlEncode(sproc.StoredProcedureType.ToString()), Server.HtmlEncode(sproc.CreateDate.ToString()) });
+                 if (!sproc.IsSystemObject || (sproc.IsSystemObject  && objectTypeFilter != SqlObjectType.User))
+                    ds.Tables[0].Rows.Add(new object[] 
+                    { 
+                        Server.HtmlEncode(sproc.Name), 
+                        Server.UrlEncode(sproc.Name), 
+                        Server.HtmlEncode(sproc.Owner), 
+                        Server.HtmlEncode(sproc.IsSystemObject ? "system" : ""),
+                        Server.HtmlEncode(sproc.CreateDate.ToString()) 
+                    });
             }
 
             // Show message if there are no tables, otherwise show datagrid

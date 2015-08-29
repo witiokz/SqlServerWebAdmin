@@ -5,7 +5,6 @@
 <%@ Register TagPrefix="Toolbar" TagName="Server" Src="Toolbars/ServerToolbar.ascx" %>
 <%@ Register TagPrefix="Location" TagName="Server" Src="Toolbars/ServerLocation.ascx" %>
 <%@ Register TagPrefix="Location" TagName="Database" Src="Toolbars/DatabaseLocation.ascx" %>
-<%@ Import Namespace="SqlAdmin" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <html>
 <head>
@@ -131,13 +130,13 @@
                                                         <ItemTemplate>
                                                             <img src="images/Roles_ico.gif" align="absmiddle">
                                                             &nbsp;
-                                                            <%#((SqlDatabaseRole)Container.DataItem).Name%>
+                                                            <%#(Container.DataItem)%>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>
                                                     <asp:BoundColumn DataField="Name" HeaderText="Role" />
                                                     <asp:TemplateColumn>
                                                         <ItemTemplate>
-                                                            <a href='EditDatabaseRole.aspx?database=<%=Request["database"]%>&role=<%#((SqlDatabaseRole)Container.DataItem).Name%>'>
+                                                            <a href='EditDatabaseRole.aspx?database=<%=Request["database"]%>&role=<%#(Container.DataItem)%>'>
                                                                 Edit</a>
                                                         </ItemTemplate>
                                                     </asp:TemplateColumn>

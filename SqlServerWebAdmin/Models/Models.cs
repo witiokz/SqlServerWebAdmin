@@ -236,5 +236,24 @@ namespace SqlServerWebAdmin.Models
     }
 
 
+    public static class Utility
+    {
+        public static string MessageFormat(Exception exception)
+        {
+            if(exception.InnerException != null)
+            {
+                if(exception.InnerException.InnerException != null)
+                {
+                    return exception.InnerException.InnerException.Message;
+                }
+                
+                return exception.InnerException.Message;
+            }
+
+            return exception.Message;
+        }
+    }
+
+
 
 }
