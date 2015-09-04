@@ -83,38 +83,38 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin.css" />
-    <Content Include="BackupDatabase.aspx" />
-    <Content Include="Columns.aspx" />
+    <Content Include="Modules\Task\BackupDatabase.aspx" />
+    <Content Include="Modules\Column\Columns.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="CreateDatabase.aspx" />
-    <Content Include="CreateDatabaseRole.aspx" />
-    <Content Include="CreateDatabaseUser.aspx" />
-    <Content Include="CreateLogin.aspx" />
-    <Content Include="CreateStoredProcedure.aspx" />
-    <Content Include="CreateTable.aspx" />
-    <Content Include="DatabaseProperties.aspx" />
-    <Content Include="DatabaseRoles.aspx" />
+    <Content Include="Modules\Database\CreateDatabase.aspx" />
+    <Content Include="Modules\DatabaseRole\CreateDatabaseRole.aspx" />
+    <Content Include="Modules\DatabaseUser\CreateDatabaseUser.aspx" />
+    <Content Include="Modules\Security\CreateLogin.aspx" />
+    <Content Include="Modules\StoredProcedure\CreateStoredProcedure.aspx" />
+    <Content Include="Modules\Table\CreateTable.aspx" />
+    <Content Include="Modules\Database\DatabaseProperties.aspx" />
+    <Content Include="Modules\DatabaseRole\DatabaseRoles.aspx" />
     <Content Include="Databases.aspx" />
-    <Content Include="DatabaseUsers.aspx" />
-    <Content Include="DeleteColumn.aspx" />
-    <Content Include="DeleteDatabase.aspx" />
-    <Content Include="DeleteDatabaseRole.aspx" />
-    <Content Include="DeleteDatabaseUser.aspx" />
-    <Content Include="DeleteStoredProcedure.aspx" />
-    <Content Include="DeleteTable.aspx" />
-    <Content Include="EditColumn.aspx" />
-    <Content Include="EditDatabaseRole.aspx" />
-    <Content Include="EditDatabaseUser.aspx" />
-    <Content Include="EditServerLogin.aspx" />
-    <Content Include="EditServerRole.aspx" />
-    <Content Include="EditStoredProcedure.aspx" />
+    <Content Include="Modules\DatabaseUser\DatabaseUsers.aspx" />
+    <Content Include="Modules\Column\DeleteColumn.aspx" />
+    <Content Include="Modules\Database\DeleteDatabase.aspx" />
+    <Content Include="Modules\DatabaseRole\DeleteDatabaseRole.aspx" />
+    <Content Include="Modules\DatabaseUser\DeleteDatabaseUser.aspx" />
+    <Content Include="Modules\StoredProcedure\DeleteStoredProcedure.aspx" />
+    <Content Include="Modules\Table\DeleteTable.aspx" />
+    <Content Include="Modules\Column\EditColumn.aspx" />
+    <Content Include="Modules\DatabaseRole\EditDatabaseRole.aspx" />
+    <Content Include="Modules\DatabaseUser\EditDatabaseUser.aspx" />
+    <Content Include="Modules\Security\EditServerLogin.aspx" />
+    <Content Include="Modules\Security\EditServerRole.aspx" />
+    <Content Include="Modules\StoredProcedure\EditStoredProcedure.aspx" />
     <Content Include="Error.aspx" />
-    <Content Include="Export.aspx" />
-    <Content Include="FileProperties.ascx" />
+    <Content Include="Modules\Task\Export.aspx" />
+    <Content Include="Modules\Database\FileProperties.ascx" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Help\admin.css" />
     <Content Include="Help\columns.aspx" />
@@ -185,9 +185,12 @@
     <Content Include="images\transparent.gif" />
     <Content Include="images\User_Ico.gif" />
     <Content Include="images\Wizards_Ico.gif" />
-    <Content Include="Import.aspx" />
-    <Content Include="LoginRolePicker.ascx" />
-    <Content Include="Logout.aspx" />
+    <Content Include="Modules\Task\Import.aspx" />
+    <Content Include="Modules\Security\LoginRolePicker.ascx" />
+    <Content Include="Modules\Account\Logout.aspx" />
+    <Content Include="Modules\View\Create.aspx" />
+    <Content Include="Modules\View\Delete.aspx" />
+    <Content Include="Modules\View\Edit.aspx" />
     <Content Include="packages.config" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -197,9 +200,9 @@
     <Content Include="Content\bootstrap.css.map" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="QueryDatabase.aspx" />
-    <Content Include="RenameTable.aspx" />
-    <Content Include="RestoreDatabase.aspx" />
+    <Content Include="Modules\Database\QueryDatabase.aspx" />
+    <Content Include="Modules\Table\RenameTable.aspx" />
+    <Content Include="Modules\Task\RestoreDatabase.aspx" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
@@ -210,12 +213,12 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Security.aspx" />
-    <Content Include="ServerLogins.aspx" />
-    <Content Include="ServerRoles.aspx" />
+    <Content Include="Modules\Security\Security.aspx" />
+    <Content Include="Modules\Security\ServerLogins.aspx" />
+    <Content Include="Modules\Security\ServerRoles.aspx" />
     <Content Include="Site.Master" />
-    <Content Include="StoredProcedures.aspx" />
-    <Content Include="Tables.aspx" />
+    <Content Include="Modules\StoredProcedure\StoredProcedures.aspx" />
+    <Content Include="Modules\Table\Tables.aspx" />
     <Content Include="TODO.txt">
       <SubType>Designer</SubType>
     </Content>
@@ -225,7 +228,7 @@
     <Content Include="Toolbars\serverlocation.ascx" />
     <Content Include="Toolbars\servertoolbar.ascx" />
     <Content Include="Toolbars\tablelocation.ascx" />
-    <Content Include="Views.aspx" />
+    <Content Include="Modules\View\Views.aspx" />
     <Content Include="Web.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
@@ -237,77 +240,74 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackupDatabase.aspx.cs">
+    <Compile Include="Modules\Task\BackupDatabase.aspx.cs">
       <DependentUpon>BackupDatabase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="BackupDatabase.aspx.designer.cs">
+    <Compile Include="Modules\Task\BackupDatabase.aspx.designer.cs">
       <DependentUpon>BackupDatabase.aspx</DependentUpon>
     </Compile>
-    <Compile Include="BasePage.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Columns.aspx.cs">
+    <Compile Include="Modules\Column\Columns.aspx.cs">
       <DependentUpon>Columns.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Columns.aspx.designer.cs">
+    <Compile Include="Modules\Column\Columns.aspx.designer.cs">
       <DependentUpon>Columns.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CreateDatabase.aspx.cs">
+    <Compile Include="Modules\Database\CreateDatabase.aspx.cs">
       <DependentUpon>CreateDatabase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CreateDatabase.aspx.designer.cs">
+    <Compile Include="Modules\Database\CreateDatabase.aspx.designer.cs">
       <DependentUpon>CreateDatabase.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CreateDatabaseRole.aspx.cs">
+    <Compile Include="Modules\DatabaseRole\CreateDatabaseRole.aspx.cs">
       <DependentUpon>CreateDatabaseRole.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CreateDatabaseRole.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseRole\CreateDatabaseRole.aspx.designer.cs">
       <DependentUpon>CreateDatabaseRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CreateDatabaseUser.aspx.cs">
+    <Compile Include="Modules\DatabaseUser\CreateDatabaseUser.aspx.cs">
       <DependentUpon>CreateDatabaseUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CreateDatabaseUser.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseUser\CreateDatabaseUser.aspx.designer.cs">
       <DependentUpon>CreateDatabaseUser.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CreateLogin.aspx.cs">
+    <Compile Include="Modules\Security\CreateLogin.aspx.cs">
       <DependentUpon>CreateLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CreateLogin.aspx.designer.cs">
+    <Compile Include="Modules\Security\CreateLogin.aspx.designer.cs">
       <DependentUpon>CreateLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CreateStoredProcedure.aspx.cs">
+    <Compile Include="Modules\StoredProcedure\CreateStoredProcedure.aspx.cs">
       <DependentUpon>CreateStoredProcedure.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CreateStoredProcedure.aspx.designer.cs">
+    <Compile Include="Modules\StoredProcedure\CreateStoredProcedure.aspx.designer.cs">
       <DependentUpon>CreateStoredProcedure.aspx</DependentUpon>
     </Compile>
-    <Compile Include="CreateTable.aspx.cs">
+    <Compile Include="Modules\Table\CreateTable.aspx.cs">
       <DependentUpon>CreateTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="CreateTable.aspx.designer.cs">
+    <Compile Include="Modules\Table\CreateTable.aspx.designer.cs">
       <DependentUpon>CreateTable.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseProperties.aspx.cs">
+    <Compile Include="Modules\Database\DatabaseProperties.aspx.cs">
       <DependentUpon>DatabaseProperties.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DatabaseProperties.aspx.designer.cs">
+    <Compile Include="Modules\Database\DatabaseProperties.aspx.designer.cs">
       <DependentUpon>DatabaseProperties.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseRoles.aspx.cs">
+    <Compile Include="Modules\DatabaseRole\DatabaseRoles.aspx.cs">
       <DependentUpon>DatabaseRoles.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DatabaseRoles.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseRole\DatabaseRoles.aspx.designer.cs">
       <DependentUpon>DatabaseRoles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Databases.aspx.cs">
@@ -317,11 +317,11 @@
     <Compile Include="Databases.aspx.designer.cs">
       <DependentUpon>Databases.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DatabaseUsers.aspx.cs">
+    <Compile Include="Modules\DatabaseUser\DatabaseUsers.aspx.cs">
       <DependentUpon>DatabaseUsers.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DatabaseUsers.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseUser\DatabaseUsers.aspx.designer.cs">
       <DependentUpon>DatabaseUsers.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
@@ -331,88 +331,88 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeleteColumn.aspx.cs">
+    <Compile Include="Modules\Column\DeleteColumn.aspx.cs">
       <DependentUpon>DeleteColumn.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeleteColumn.aspx.designer.cs">
+    <Compile Include="Modules\Column\DeleteColumn.aspx.designer.cs">
       <DependentUpon>DeleteColumn.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeleteDatabase.aspx.cs">
+    <Compile Include="Modules\Database\DeleteDatabase.aspx.cs">
       <DependentUpon>DeleteDatabase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeleteDatabase.aspx.designer.cs">
+    <Compile Include="Modules\Database\DeleteDatabase.aspx.designer.cs">
       <DependentUpon>DeleteDatabase.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeleteDatabaseRole.aspx.cs">
+    <Compile Include="Modules\DatabaseRole\DeleteDatabaseRole.aspx.cs">
       <DependentUpon>DeleteDatabaseRole.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeleteDatabaseRole.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseRole\DeleteDatabaseRole.aspx.designer.cs">
       <DependentUpon>DeleteDatabaseRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeleteDatabaseUser.aspx.cs">
+    <Compile Include="Modules\DatabaseUser\DeleteDatabaseUser.aspx.cs">
       <DependentUpon>DeleteDatabaseUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeleteDatabaseUser.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseUser\DeleteDatabaseUser.aspx.designer.cs">
       <DependentUpon>DeleteDatabaseUser.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeleteStoredProcedure.aspx.cs">
+    <Compile Include="Modules\StoredProcedure\DeleteStoredProcedure.aspx.cs">
       <DependentUpon>DeleteStoredProcedure.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeleteStoredProcedure.aspx.designer.cs">
+    <Compile Include="Modules\StoredProcedure\DeleteStoredProcedure.aspx.designer.cs">
       <DependentUpon>DeleteStoredProcedure.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DeleteTable.aspx.cs">
+    <Compile Include="Modules\Table\DeleteTable.aspx.cs">
       <DependentUpon>DeleteTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="DeleteTable.aspx.designer.cs">
+    <Compile Include="Modules\Table\DeleteTable.aspx.designer.cs">
       <DependentUpon>DeleteTable.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditColumn.aspx.cs">
+    <Compile Include="Modules\Column\EditColumn.aspx.cs">
       <DependentUpon>EditColumn.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditColumn.aspx.designer.cs">
+    <Compile Include="Modules\Column\EditColumn.aspx.designer.cs">
       <DependentUpon>EditColumn.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditDatabaseRole.aspx.cs">
+    <Compile Include="Modules\DatabaseRole\EditDatabaseRole.aspx.cs">
       <DependentUpon>EditDatabaseRole.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditDatabaseRole.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseRole\EditDatabaseRole.aspx.designer.cs">
       <DependentUpon>EditDatabaseRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditDatabaseUser.aspx.cs">
+    <Compile Include="Modules\DatabaseUser\EditDatabaseUser.aspx.cs">
       <DependentUpon>EditDatabaseUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditDatabaseUser.aspx.designer.cs">
+    <Compile Include="Modules\DatabaseUser\EditDatabaseUser.aspx.designer.cs">
       <DependentUpon>EditDatabaseUser.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditServerLogin.aspx.cs">
+    <Compile Include="Modules\Security\EditServerLogin.aspx.cs">
       <DependentUpon>EditServerLogin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditServerLogin.aspx.designer.cs">
+    <Compile Include="Modules\Security\EditServerLogin.aspx.designer.cs">
       <DependentUpon>EditServerLogin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditServerRole.aspx.cs">
+    <Compile Include="Modules\Security\EditServerRole.aspx.cs">
       <DependentUpon>EditServerRole.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditServerRole.aspx.designer.cs">
+    <Compile Include="Modules\Security\EditServerRole.aspx.designer.cs">
       <DependentUpon>EditServerRole.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditStoredProcedure.aspx.cs">
+    <Compile Include="Modules\StoredProcedure\EditStoredProcedure.aspx.cs">
       <DependentUpon>EditStoredProcedure.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditStoredProcedure.aspx.designer.cs">
+    <Compile Include="Modules\StoredProcedure\EditStoredProcedure.aspx.designer.cs">
       <DependentUpon>EditStoredProcedure.aspx</DependentUpon>
     </Compile>
     <Compile Include="Error.aspx.cs">
@@ -422,18 +422,18 @@
     <Compile Include="Error.aspx.designer.cs">
       <DependentUpon>Error.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Export.aspx.cs">
+    <Compile Include="Modules\Task\Export.aspx.cs">
       <DependentUpon>Export.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Export.aspx.designer.cs">
+    <Compile Include="Modules\Task\Export.aspx.designer.cs">
       <DependentUpon>Export.aspx</DependentUpon>
     </Compile>
-    <Compile Include="FileProperties.ascx.cs">
+    <Compile Include="Modules\Database\FileProperties.ascx.cs">
       <DependentUpon>FileProperties.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="FileProperties.ascx.designer.cs">
+    <Compile Include="Modules\Database\FileProperties.ascx.designer.cs">
       <DependentUpon>FileProperties.ascx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -554,59 +554,80 @@
       <DependentUpon>tables.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Import.aspx.cs">
+    <Compile Include="Modules\Task\Import.aspx.cs">
       <DependentUpon>Import.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Import.aspx.designer.cs">
+    <Compile Include="Modules\Task\Import.aspx.designer.cs">
       <DependentUpon>Import.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Logout.aspx.cs">
+    <Compile Include="Modules\Account\Logout.aspx.cs">
       <DependentUpon>Logout.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Models\Models.cs" />
+    <Compile Include="Modules\View\Create.aspx.cs">
+      <DependentUpon>Create.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Modules\View\Create.aspx.designer.cs">
+      <DependentUpon>Create.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\View\Delete.aspx.cs">
+      <DependentUpon>Delete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Modules\View\Delete.aspx.designer.cs">
+      <DependentUpon>Delete.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Modules\View\Edit.aspx.cs">
+      <DependentUpon>Edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Modules\View\Edit.aspx.designer.cs">
+      <DependentUpon>Edit.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryDatabase.aspx.cs">
+    <Compile Include="Modules\Database\QueryDatabase.aspx.cs">
       <DependentUpon>QueryDatabase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="QueryDatabase.aspx.designer.cs">
+    <Compile Include="Modules\Database\QueryDatabase.aspx.designer.cs">
       <DependentUpon>QueryDatabase.aspx</DependentUpon>
     </Compile>
-    <Compile Include="RenameTable.aspx.cs">
+    <Compile Include="Modules\Table\RenameTable.aspx.cs">
       <DependentUpon>RenameTable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RenameTable.aspx.designer.cs">
+    <Compile Include="Modules\Table\RenameTable.aspx.designer.cs">
       <DependentUpon>RenameTable.aspx</DependentUpon>
     </Compile>
-    <Compile Include="RestoreDatabase.aspx.cs">
+    <Compile Include="Modules\Task\RestoreDatabase.aspx.cs">
       <DependentUpon>RestoreDatabase.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RestoreDatabase.aspx.designer.cs">
+    <Compile Include="Modules\Task\RestoreDatabase.aspx.designer.cs">
       <DependentUpon>RestoreDatabase.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Security.aspx.cs">
+    <Compile Include="Modules\Security\Security.aspx.cs">
       <DependentUpon>Security.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Security.aspx.designer.cs">
+    <Compile Include="Modules\Security\Security.aspx.designer.cs">
       <DependentUpon>Security.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ServerLogins.aspx.cs">
+    <Compile Include="Modules\Security\ServerLogins.aspx.cs">
       <DependentUpon>ServerLogins.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ServerLogins.aspx.designer.cs">
+    <Compile Include="Modules\Security\ServerLogins.aspx.designer.cs">
       <DependentUpon>ServerLogins.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ServerRoles.aspx.cs">
+    <Compile Include="Modules\Security\ServerRoles.aspx.cs">
       <DependentUpon>ServerRoles.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ServerRoles.aspx.designer.cs">
+    <Compile Include="Modules\Security\ServerRoles.aspx.designer.cs">
       <DependentUpon>ServerRoles.aspx</DependentUpon>
     </Compile>
     <Compile Include="Site.Master.cs">
@@ -616,18 +637,18 @@
     <Compile Include="Site.Master.designer.cs">
       <DependentUpon>Site.Master</DependentUpon>
     </Compile>
-    <Compile Include="StoredProcedures.aspx.cs">
+    <Compile Include="Modules\StoredProcedure\StoredProcedures.aspx.cs">
       <DependentUpon>StoredProcedures.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="StoredProcedures.aspx.designer.cs">
+    <Compile Include="Modules\StoredProcedure\StoredProcedures.aspx.designer.cs">
       <DependentUpon>StoredProcedures.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Tables.aspx.cs">
+    <Compile Include="Modules\Table\Tables.aspx.cs">
       <DependentUpon>Tables.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Tables.aspx.designer.cs">
+    <Compile Include="Modules\Table\Tables.aspx.designer.cs">
       <DependentUpon>Tables.aspx</DependentUpon>
     </Compile>
     <Compile Include="Toolbars\databaselocation.ascx.cs">
@@ -672,11 +693,11 @@
     <Compile Include="Toolbars\tablelocation.ascx.designer.cs">
       <DependentUpon>tablelocation.ascx</DependentUpon>
     </Compile>
-    <Compile Include="Views.aspx.cs">
+    <Compile Include="Modules\View\Views.aspx.cs">
       <DependentUpon>Views.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Views.aspx.designer.cs">
+    <Compile Include="Modules\View\Views.aspx.designer.cs">
       <DependentUpon>Views.aspx</DependentUpon>
     </Compile>
   </ItemGroup>

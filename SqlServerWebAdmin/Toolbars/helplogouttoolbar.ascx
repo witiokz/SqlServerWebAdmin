@@ -2,13 +2,11 @@
 
 <li>
 <asp:HyperLink id="HelpImageHyperLink" runat="server" Target="_blank">
-    <span class="glyphicon glyphicon-question-sign"></span>
+    Documentation
 </asp:HyperLink>
 </li>
 <li>
-<asp:HyperLink id="LogoutImageHyperLink" runat="server">
-    <span class="glyphicon glyphicon-remove-sign"></span>
-</asp:HyperLink>
+    <asp:HyperLink id="LogoutImageHyperLink" NavigateUrl="~/Modules/Account/Logout.aspx" runat="server" Text="Logout" />
 </li>
 
 

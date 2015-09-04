@@ -13,24 +13,6 @@ namespace SqlWebAdmin {
     public partial class Login {
         
         /// <summary>
-        /// WebForm1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm WebForm1;
-        
-        /// <summary>
-        /// HelpLogout control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.helplogouttoolbar HelpLogout;
-        
-        /// <summary>
         /// LogoutInfoLabel control.
         /// </summary>
         /// <remarks>
@@ -56,15 +38,6 @@ namespace SqlWebAdmin {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList SqlServerDLL;
-        
-        /// <summary>
-        /// lblAuth control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblAuth;
         
         /// <summary>
         /// AuthRadioButtonList control.

@@ -45,7 +45,10 @@
                         <LoggedInTemplate>
                             <ul class="nav navbar-nav navbar-right">
                                    <%-- <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />--%>
-                                    <Toolbar:HelpLogout runat="server" ID="HelpLogout" HelpTopic="login"></Toolbar:HelpLogout>
+                                    <% if(SqlServerWebAdmin.Models.AdminUser.CurrentUser != null)
+                                       { %>
+                                        <Toolbar:HelpLogout runat="server" ID="HelpLogout" HelpTopic="login"></Toolbar:HelpLogout>
+                                    <% } %>
                             </ul>
                         </LoggedInTemplate>
                     </asp:LoginView>
@@ -58,12 +61,16 @@
                     &nbsp;
                 </div>
                 <div class="col-md-9">
-                    <Location:Server runat="Server" ID="ServerLocation"></Location:Server>
+                    <% if(SqlServerWebAdmin.Models.AdminUser.CurrentUser != null) { %>
+                                        <Location:Server runat="Server" ID="ServerLocation"></Location:Server>
+                    <% } %>
                 </div>
             </div>
              <div class="row">
                 <div class="col-md-3">
+                     <% if(SqlServerWebAdmin.Models.AdminUser.CurrentUser != null) { %>
                      <Toolbar:Server Selected="" runat="server" ID="ServerToolbar"></Toolbar:Server>
+                    <% } %>
                 </div>
                 <div class="col-md-9">
                     <asp:ContentPlaceHolder ID="MainContent" runat="server"> </asp:ContentPlaceHolder>

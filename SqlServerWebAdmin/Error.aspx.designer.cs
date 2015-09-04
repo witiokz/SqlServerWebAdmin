@@ -13,24 +13,6 @@ namespace SqlServerWebAdmin {
     public partial class Error {
         
         /// <summary>
-        /// HelpLogout control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.helplogouttoolbar HelpLogout;
-        
-        /// <summary>
-        /// ServerToolbar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.servertoolbar ServerToolbar;
-        
-        /// <summary>
         /// ErrorLabel control.
         /// </summary>
         /// <remarks>

@@ -12,6 +12,10 @@ namespace SqlServerWebAdmin.Toolbars
     {
         protected void Page_Load(object sender, System.EventArgs e)
         {
+            if(AdminUser.CurrentUser == null)
+            {
+                return;
+            }
 
             string serverName = AdminUser.CurrentUser.Server;
 

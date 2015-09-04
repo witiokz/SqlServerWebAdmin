@@ -51,21 +51,6 @@ namespace SqlServerWebAdmin
                 ErrorLabel.Text = "Error Message: <br>" + Request["errormsg"].Replace("\n", "<br>") + "<br><br>" +
                                   "Stack Trace: <br>" + Request["stacktrace"].Replace("\n", "<br>");
             }
-            //else if (HttpContext.Current.Request.QueryString["errorPassCode"] != null)
-            //// Check to see if there is an error code in the query string of the redirect url
-            //{
-            //    ErrorLabel.Text = ErrorLookup(Int32.Parse(HttpContext.Current.Request.QueryString["errorPassCode"]));
-
-            //    Exception x = (Exception)Application["Error"];
-
-            //    while (x != null)
-            //    {
-            //        ErrorLabel.Text += x.Message.Replace("\n", "<br>") + "<br><br>" + "<br><hr><br>";
-            //        x = x.InnerException;
-            //    }
-
-            //    Application.Remove("Error");
-            //}
             else
             {
                 ErrorLabel.Text = "An unknown error has occured. Please try again.";

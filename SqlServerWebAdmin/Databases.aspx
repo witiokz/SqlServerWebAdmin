@@ -1,54 +1,50 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Databases.aspx.cs" Inherits="SqlServerWebAdmin.Databases" MasterPageFile="~/Site.master" %>
 
 <asp:Content ID="MainContent1" ContentPlaceHolderID="MainContent" runat="server">
-    <h3>DATABASES </h3>
+    <h3>Databases</h3>
 
-    <asp:HyperLink runat="server" CssClass="createLink btn btn-success" ID="AddNewDatabaseHyperLink" NavigateUrl="CreateDatabase.aspx">
-        Create new database
-    </asp:HyperLink>
-
-    <asp:DataGrid ID="DatabasesDataGrid" runat="server" GridLines="None" Border="0" AutoGenerateColumns="False" Width="100%">
+    <div class="row">
+        <div class="col-md-12">
+                <asp:HyperLink runat="server" CssClass="btn btn-success pull-right" ID="AddNewDatabaseHyperLink" NavigateUrl="~/Modules/Database/CreateDatabase.aspx">
+                    Create new database
+                </asp:HyperLink>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+        <div class="col-md-12">
+        <asp:GridView ID="DatabasesDataGrid" CssClass="table table-bordered" runat="server" GridLines="None" Border="0" AutoGenerateColumns="False">
         <Columns>
-            <asp:TemplateColumn HeaderText="Name">
+            <asp:TemplateField HeaderText="Name">
                 <HeaderStyle Wrap="False"></HeaderStyle>
                 <ItemStyle Wrap="False"></ItemStyle>
                 <ItemTemplate>
-                    <a href='<%# String.Format("tables.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
+                    <a href='<%# string.Format("~/Modules/Table/Tables.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
                         <span class="glyphicon glyphicon-oil"></span>
                     </a>
                     &nbsp;
-                    <asp:HyperLink ID="Hyperlink1" runat="server" Text='<%# "&amp;nbsp;" + DataBinder.Eval(Container.DataItem, "name") %>' NavigateUrl='<%# String.Format("tables.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>' />
+                    <asp:HyperLink runat="server" Text='<%# "&amp;nbsp;" + DataBinder.Eval(Container.DataItem, "name") %>' NavigateUrl='<%# String.Format("~/Modules/Table/tables.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>' />
                 </ItemTemplate>
-            </asp:TemplateColumn>
-            <asp:BoundColumn DataField="size" HeaderText="Size" DataFormatString="{0}">
-                <HeaderStyle Wrap="False" HorizontalAlign="Right"></HeaderStyle>
-                <ItemStyle Wrap="False" HorizontalAlign="Right"></ItemStyle>
-            </asp:BoundColumn>
-            <asp:TemplateColumn HeaderText="Edit">
-                <HeaderStyle Wrap="False" HorizontalAlign="Right"></HeaderStyle>
-                <ItemStyle Wrap="False" HorizontalAlign="Right"></ItemStyle>
+            </asp:TemplateField>
+            <asp:BoundField DataField="size" HeaderText="Size" DataFormatString="{0}" HeaderStyle-Width="30px">
+            </asp:BoundField>
+            <asp:TemplateField HeaderStyle-Width="10px">
                 <ItemTemplate>
-                    <asp:HyperLink ID="EditDatabase" runat="server" Text="edit" NavigateUrl='<%# String.Format("tables.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
+                    <asp:HyperLink ID="QueryDatabase" runat="server" NavigateUrl='<%# String.Format("~/Modules/Database/querydatabase.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
+                        <span class="glyphicon glyphicon-edit"></span>
                     </asp:HyperLink>
                 </ItemTemplate>
-            </asp:TemplateColumn>
-            <asp:TemplateColumn HeaderText="Query">
-                <HeaderStyle Wrap="False" HorizontalAlign="Right"></HeaderStyle>
-                <ItemStyle Wrap="False" HorizontalAlign="Right"></ItemStyle>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="" HeaderStyle-Width="10px">
                 <ItemTemplate>
-                    <asp:HyperLink ID="QueryDatabase" runat="server" Text="query" NavigateUrl='<%# String.Format("querydatabase.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
+                    <asp:HyperLink ID="DeleteDatabase" runat="server" NavigateUrl='<%# String.Format("~/Modules/Database/deletedatabase.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
+                         <span class="glyphicon glyphicon-remove-sign text-danger"></span>
                     </asp:HyperLink>
                 </ItemTemplate>
-            </asp:TemplateColumn>
-            <asp:TemplateColumn HeaderText="Delete">
-                <HeaderStyle Wrap="False" HorizontalAlign="Right"></HeaderStyle>
-                <ItemStyle Wrap="False" HorizontalAlign="Right"></ItemStyle>
-                <ItemTemplate>
-                    <asp:HyperLink ID="DeleteDatabase" runat="server" Text="delete" NavigateUrl='<%# String.Format("deletedatabase.aspx?database={0}", DataBinder.Eval(Container.DataItem, "encodedname")) %>'>
-                    </asp:HyperLink>
-                </ItemTemplate>
-            </asp:TemplateColumn>
+            </asp:TemplateField>
         </Columns>
-    </asp:DataGrid>
+    </asp:GridView>
+        </div>
+    </div>
+   
 </asp:Content>
 

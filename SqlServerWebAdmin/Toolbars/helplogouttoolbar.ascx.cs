@@ -29,7 +29,6 @@ namespace SqlServerWebAdmin.Toolbars
         {
             // Put user code to initialize the page here
             HelpImageHyperLink.NavigateUrl = "../Help/" + helpTopic + ".aspx";
-            LogoutImageHyperLink.NavigateUrl = "../Logout.aspx";
         }
     }
 }

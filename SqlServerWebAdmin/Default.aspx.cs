@@ -37,11 +37,6 @@ namespace SqlWebAdmin
     /// </summary>
     public partial class Login : Page
     {
-        public Login()
-        {
-            Page.Init += new System.EventHandler(Page_Init);
-        }
-
         protected void Page_Load(object sender, System.EventArgs e)
         {
 
@@ -92,21 +87,12 @@ namespace SqlWebAdmin
             }
         }
 
-        protected void Page_Init(object sender, EventArgs e)
-        {
-            if (Page.User.Identity.IsAuthenticated)
-            {
-                Page.ViewStateUserKey = Page.Session.SessionID;
-            }
-            
-        }
-
         protected void LoginButton_Click(object sender, System.EventArgs e)
         {
             if (!IsValid)
                 return;
 
-            var serverName = SqlServerDLL.SelectedItem.Text;//ServerTextBox.Text
+            var serverName = SqlServerDLL.SelectedItem.Text;
 
             bool useIntegrated;
             Server server = new Server(serverName);
@@ -123,8 +109,6 @@ namespace SqlWebAdmin
 
                 try
                 {
-                   // server = new SqlServer(ServerTextBox.Text, this.UsernameTextBox.Text, this.PasswordTextBox.Text, true);
-
                     //Using windows authentication
                     server.ConnectionContext.LoginSecure = true;
                     server.ConnectionContext.Connect();

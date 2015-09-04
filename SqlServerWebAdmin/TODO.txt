@@ -1,7 +1,4 @@
-﻿DatabaseProperties
-FileProperties
+﻿DatabaseProperties.aspx
+FileProperties.ascx
 Import
 edit database user
-manage views
-check database delete
-modify column
