@@ -13,49 +13,13 @@ namespace SqlServerWebAdmin {
     public partial class ServerLogins {
         
         /// <summary>
-        /// WebForm1 control.
+        /// AddNewDatabaseHyperLink control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm WebForm1;
-        
-        /// <summary>
-        /// HelpLogout control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.helplogouttoolbar HelpLogout;
-        
-        /// <summary>
-        /// ServerLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.serverlocation ServerLocation;
-        
-        /// <summary>
-        /// ServerToolbar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.servertoolbar ServerToolbar;
-        
-        /// <summary>
-        /// AddNewLoginHyperLink control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink AddNewLoginHyperLink;
+        protected global::System.Web.UI.WebControls.HyperLink AddNewDatabaseHyperLink;
         
         /// <summary>
         /// LoginDataGrid control.
@@ -64,6 +28,6 @@ namespace SqlServerWebAdmin {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataGrid LoginDataGrid;
+        protected global::System.Web.UI.WebControls.GridView LoginDataGrid;
     }
 }

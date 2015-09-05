@@ -42,6 +42,7 @@
         <div class="form-group">
             <div class="col-md-offset-3 col-md-9">
                 <asp:Button ID="LoginButton" runat="server" CssClass="btn btn-default" Text="Connect" OnClick="LoginButton_Click"></asp:Button>
+                <br />
                 <asp:Label ID="ErrorLabel" runat="server" Visible="False"></asp:Label>
             </div>
         </div>

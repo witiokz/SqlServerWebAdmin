@@ -19,11 +19,10 @@ namespace SqlServerWebAdmin
 
         protected void Page_Load(object sender, System.EventArgs e)
         {
-            Server server = null;
+            Microsoft.SqlServer.Management.Smo.Server server = DbExtensions.CurrentServer;
             try
             {
-                server = DbUtlity.Connect();
-                server.ConnectionContext.Connect();
+                server.Connect();
             }
             catch (System.Exception ex)
             {
@@ -31,7 +30,7 @@ namespace SqlServerWebAdmin
             }
 
             var databases = server.Databases;
-            DbUtlity.Disconnect(server);
+            server.Disconnect();
 
             // Create DataSet from list of databases
             DataSet ds = new DataSet();

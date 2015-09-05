@@ -82,14 +82,12 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="admin.css" />
     <Content Include="Modules\Task\BackupDatabase.aspx" />
     <Content Include="Modules\Column\Columns.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Site.css" />
     <Content Include="Modules\Database\CreateDatabase.aspx" />
     <Content Include="Modules\DatabaseRole\CreateDatabaseRole.aspx" />
     <Content Include="Modules\DatabaseUser\CreateDatabaseUser.aspx" />
@@ -146,45 +144,6 @@
     <Content Include="Help\storedprocedures.aspx" />
     <Content Include="Help\tables.aspx" />
     <Content Include="Help\TOC.inc" />
-    <Content Include="images\bg_adminTool.gif" />
-    <Content Include="images\bg_error.gif" />
-    <Content Include="images\bg_horizontal_bottom.gif" />
-    <Content Include="images\bg_horizontal_dark.gif" />
-    <Content Include="images\bg_horizontal_top.gif" />
-    <Content Include="images\bg_left.gif" />
-    <Content Include="images\bg_left_bar.gif" />
-    <Content Include="images\bg_login.gif" />
-    <Content Include="images\bg_security.gif" />
-    <Content Include="images\Black_Line.gif" />
-    <Content Include="images\Button_Back.gif" />
-    <Content Include="images\checkmark.gif" />
-    <Content Include="images\checknomark.gif" />
-    <Content Include="images\darkBlue.gif" />
-    <Content Include="images\darkGray.gif" />
-    <Content Include="images\dbs_ico.gif" />
-    <Content Include="images\db_ico.gif" />
-    <Content Include="images\grayDivide.gif" />
-    <Content Include="images\help.gif" />
-    <Content Include="images\ico_error.gif" />
-    <Content Include="images\key.gif" />
-    <Content Include="images\logout.gif" />
-    <Content Include="images\navy.gif" />
-    <Content Include="images\New.gif" />
-    <Content Include="images\paleYellow.gif" />
-    <Content Include="images\prop_ico.gif" />
-    <Content Include="images\Query_Ico.gif" />
-    <Content Include="images\Roles_Ico.gif" />
-    <Content Include="images\ServerLogins_S_Ico.gif" />
-    <Content Include="images\ServerRoles_Ico.gif" />
-    <Content Include="images\Server_Ico.gif" />
-    <Content Include="images\Server_Logins.gif" />
-    <Content Include="images\Server_Roles.gif" />
-    <Content Include="images\skyBlue.gif" />
-    <Content Include="images\Sproc_Ico.gif" />
-    <Content Include="images\Table_Ico.gif" />
-    <Content Include="images\transparent.gif" />
-    <Content Include="images\User_Ico.gif" />
-    <Content Include="images\Wizards_Ico.gif" />
     <Content Include="Modules\Task\Import.aspx" />
     <Content Include="Modules\Security\LoginRolePicker.ascx" />
     <Content Include="Modules\Account\Logout.aspx" />
@@ -208,7 +167,6 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
@@ -222,12 +180,8 @@
     <Content Include="TODO.txt">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Toolbars\databaselocation.ascx" />
-    <Content Include="Toolbars\databasetoolbar.ascx" />
-    <Content Include="Toolbars\helplogouttoolbar.ascx" />
     <Content Include="Toolbars\serverlocation.ascx" />
     <Content Include="Toolbars\servertoolbar.ascx" />
-    <Content Include="Toolbars\tablelocation.ascx" />
     <Content Include="Modules\View\Views.aspx" />
     <Content Include="Web.config" />
     <None Include="Project_Readme.html" />
@@ -651,27 +605,6 @@
     <Compile Include="Modules\Table\Tables.aspx.designer.cs">
       <DependentUpon>Tables.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Toolbars\databaselocation.ascx.cs">
-      <DependentUpon>databaselocation.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Toolbars\databaselocation.ascx.designer.cs">
-      <DependentUpon>databaselocation.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Toolbars\databasetoolbar.ascx.cs">
-      <DependentUpon>databasetoolbar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Toolbars\databasetoolbar.ascx.designer.cs">
-      <DependentUpon>databasetoolbar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Toolbars\helplogouttoolbar.ascx.cs">
-      <DependentUpon>helplogouttoolbar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Toolbars\helplogouttoolbar.ascx.designer.cs">
-      <DependentUpon>helplogouttoolbar.ascx</DependentUpon>
-    </Compile>
     <Compile Include="Toolbars\serverlocation.ascx.cs">
       <DependentUpon>serverlocation.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -685,13 +618,6 @@
     </Compile>
     <Compile Include="Toolbars\servertoolbar.ascx.designer.cs">
       <DependentUpon>servertoolbar.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Toolbars\tablelocation.ascx.cs">
-      <DependentUpon>tablelocation.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Toolbars\tablelocation.ascx.designer.cs">
-      <DependentUpon>tablelocation.ascx</DependentUpon>
     </Compile>
     <Compile Include="Modules\View\Views.aspx.cs">
       <DependentUpon>Views.aspx</DependentUpon>

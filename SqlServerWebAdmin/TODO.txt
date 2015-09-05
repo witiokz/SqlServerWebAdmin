@@ -1,4 +1,3 @@
 ﻿DatabaseProperties.aspx
 FileProperties.ascx
-Import
 edit database user

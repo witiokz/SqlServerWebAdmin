@@ -29,21 +29,19 @@ namespace SqlServerWebAdmin
                 {
                     server.Connect();
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                     Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
                 }
 
                 sqlLogin = server.Logins[Request["Login"]];
 
                 if (sqlLogin == null)
-                    Response.Redirect("CreateLogin.aspx");
+                    Response.Redirect("~/Modules/Security/CreateLogin.aspx");
 
                 if (sqlLogin.LoginType == LoginType.WindowsUser || sqlLogin.LoginType == LoginType.WindowsGroup)
                 {
                     SecurityAccess.Enabled = true;
-                    SecurityAccessLabel.Enabled = true;
 
                     if (sqlLogin.WindowsLoginAccessType == WindowsLoginAccessType.Deny)
                     {
@@ -118,7 +116,7 @@ namespace SqlServerWebAdmin
                 case "EditRoles":
                     if (this.Save())
                     {
-                       // Response.Redirect("DatabaseRoles.aspx?database=" + Server.UrlEncode((string)DatabaseAccessGrid.DataKeys[e.CommandArgument]));
+                        Response.Redirect("DatabaseRoles.aspx?database=" + Server.UrlEncode((string)DatabaseAccessGrid.DataKeys[(int)e.CommandArgument].Value));
                     }
                     break;
             }
@@ -126,17 +124,17 @@ namespace SqlServerWebAdmin
 
         protected void DatabaseAccessGrid_Databound(object sender, GridViewRowEventArgs e)
         {
-            //if (e.Row.RowType == DataControlRowType.A ListItemType.AlternatingItem || e.Row.RowType == ListItemType.Item)
-            //{
-            //    Database database = databases[(string)DatabaseAccessGrid.DataKeys[e.Row.RowIndex]];
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                Database database = databases[(string)DatabaseAccessGrid.DataKeys[(int)e.Row.RowIndex].Value];
 
-            //    if (sqlLogin.GetDatabaseUser(database.Name) != null)
-            //    {
-            //        CheckBox cb = e.RowType.FindControl("DatabaseAccess") as CheckBox;
-            //        if (cb != null)
-            //            cb.Checked = true;
-            //    }
-            //}
+                if (sqlLogin.GetDatabaseUser(database.Name) != null)
+                {
+                    CheckBox cb = e.Row.FindControl("DatabaseAccess") as CheckBox;
+                    if (cb != null)
+                        cb.Checked = true;
+                }
+            }
         }
 
         protected void Sections_Changed(object sender, EventArgs e)
@@ -172,7 +170,6 @@ namespace SqlServerWebAdmin
             }
             catch (System.Exception ex)
             {
-                //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
@@ -207,7 +204,7 @@ namespace SqlServerWebAdmin
                 // Save database access
                 foreach (GridViewRow item in DatabaseAccessGrid.Rows)
                 {
-                    Database database = null;//databases[(string)DatabaseAccessGrid.DataKeys[item.RowIndex]];
+                    Database database =DatabaseAccessGrid.DataKeys.Count > 0 ? databases[(string)DatabaseAccessGrid.DataKeys[(int)item.RowIndex].Value] : null;
                     CheckBox cb = item.FindControl("DatabaseAccess") as CheckBox;
                     if (database != null && cb != null)
                     {
@@ -220,7 +217,6 @@ namespace SqlServerWebAdmin
                         {
                             var user = new User(database, sqlLogin.Name);
                             user.Create();
-                            //database.Users.Add(sqlLogin.Name, sqlLogin.Name);
                         }
                     }
                 }

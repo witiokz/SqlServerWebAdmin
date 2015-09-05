@@ -45,7 +45,7 @@ namespace SqlServerWebAdmin
                 //server.(q);
 
 
-                var strConnString = ""; //server.Configuration. System.Configuration.ConfigurationManager.ConnectionStrings["conString"].ConnectionString;
+                var strConnString = server.ConnectionContext.SqlConnectionObject.ConnectionString;
                 using(SqlConnection con = new SqlConnection(strConnString))
                 {
                     con.Open();

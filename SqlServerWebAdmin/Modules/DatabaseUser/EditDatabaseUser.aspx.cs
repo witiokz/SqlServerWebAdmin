@@ -36,7 +36,6 @@ namespace SqlServerWebAdmin
                 if (user == null)
                     Response.Redirect("DatabaseUsers.aspx");
 
-                UsernameLabel.Text = user.Name.ToUpper();
                 LoginLabel.Text = user.Login;
 
                 DatabaseRoleCollection dbRoles = database.Roles;
@@ -99,12 +98,7 @@ namespace SqlServerWebAdmin
                 server.Disconnect();
             }
 
-            Response.Redirect("DatabaseUsers.aspx?database=" + Server.UrlEncode(Request["database"]));
-        }
-
-        protected void Cancel_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("DatabaseUsers.aspx?database=" + Server.UrlEncode(Request["Database"]));
+            Response.Redirect("~/Modules/DatabaseUser/DatabaseUsers.aspx?database=" + Server.UrlEncode(Request["database"]));
         }
     }
 }

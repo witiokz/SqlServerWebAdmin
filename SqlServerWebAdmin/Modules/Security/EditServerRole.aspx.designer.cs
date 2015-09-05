@@ -13,51 +13,6 @@ namespace SqlServerWebAdmin {
     public partial class EditServerRole {
         
         /// <summary>
-        /// CreateDatabase control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm CreateDatabase;
-        
-        /// <summary>
-        /// HelpLogout control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.helplogouttoolbar HelpLogout;
-        
-        /// <summary>
-        /// ServerLocation control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.serverlocation ServerLocation;
-        
-        /// <summary>
-        /// ServerToolbar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::SqlServerWebAdmin.Toolbars.servertoolbar ServerToolbar;
-        
-        /// <summary>
-        /// RoleLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label RoleLabel;
-        
-        /// <summary>
         /// RoleLogins control.
         /// </summary>
         /// <remarks>

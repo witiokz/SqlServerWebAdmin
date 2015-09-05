@@ -19,6 +19,7 @@
         <div class="form-group">
             <div class="col-md-offset-3 col-md-9">
                 <asp:Button runat="server" ID="ImportButton" CssClass="btn btn-default" Text="Import" OnClick="ImportButton_Click"></asp:Button>
+                <br />
                 <asp:Label ID="ImportLabel" runat="server"></asp:Label>
             </div>
         </div>

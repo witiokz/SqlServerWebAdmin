@@ -1,17 +1,19 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="serverlocation.ascx.cs" Inherits="SqlServerWebAdmin.Toolbars.serverlocation" %>
 
-<%@ Register TagPrefix="Location" TagName="Database" Src="DatabaseLocation.ascx" %>
-<%@ Register TagPrefix="Location" TagName="Table" Src="TableLocation.ascx" %>
 
-<span class="glyphicon glyphicon-hdd" aria-hidden="true"></span> Server:
-<asp:HyperLink id="ServerNameHyperLink" runat="server" CssClass="currentItem" />
+<span class="glyphicon glyphicon-hdd" aria-hidden="true"></span>Server:
+<asp:HyperLink ID="ServerNameHyperLink" runat="server" CssClass="currentItem" />
 &nbsp;&nbsp; 
 
-<% if (Request["database"] != null) { %>
-     <Location:Database runat="Server" ID="DatabaseLocation"></Location:Database>
+<% if (Request["database"] != null)
+   { %>
+    Database:
+    <a href="Tables.aspx?database=<%=Server.UrlEncode(Request["database"]) %>"><%= Server.UrlEncode(Request["database"]) %></a>
 <% } %>
 
 <% if (Request["table"] != null)
    { %>
-      <Location:Table runat="Server" ID="TableLocation"></Location:Table>
+      Table:
+<a href="/Modules/Column/Columns.aspx?database=<%=Server.UrlEncode(Request["database"]) %>&table=<%=Server.UrlEncode(Request["table"]) %>"><%= Server.UrlEncode(Request["table"]) %></a>
+
 <% } %>

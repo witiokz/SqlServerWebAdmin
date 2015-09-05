@@ -11,10 +11,6 @@ namespace SqlServerWebAdmin
 {
     public partial class DeleteDatabaseRole : System.Web.UI.Page
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
 
         protected void Yes_Click(object sender, EventArgs e)
         {
@@ -25,22 +21,17 @@ namespace SqlServerWebAdmin
             }
             catch (System.Exception ex)
             {
-                //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
 
             Database database = server.Databases[HttpContext.Current.Server.HtmlDecode(HttpContext.Current.Request["database"])];
 
-            // TODO: Delete Role
+            database.Roles[Request["role"]].Drop();
 
             server.Disconnect();
 
-            Response.Redirect("DatabaseRoles.aspx?database=" + Server.UrlEncode(Request["database"]));
+            Response.Redirect("~/Modules/DatabaseRole/DatabaseRoles.aspx?database=" + Server.UrlEncode(Request["database"]));
         }
 
-        protected void No_Click(object sender, EventArgs e)
-        {
-            Response.Redirect("DatabaseRoles.aspx?database=" + Server.UrlEncode(Request["database"]));
-        }
     }
 }

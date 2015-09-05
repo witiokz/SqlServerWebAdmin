@@ -1,11 +1,16 @@
-﻿using System;
+﻿using SqlServerWebAdmin.Models;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 
 namespace SqlServerWebAdmin
 {
@@ -54,26 +59,33 @@ namespace SqlServerWebAdmin
 
         protected void master_Page_PreLoad(object sender, EventArgs e)
         {
-            //if (!IsPostBack)
-            //{
-            //    // Set Anti-XSRF token
-            //    ViewState[AntiXsrfTokenKey] = Page.ViewStateUserKey;
-            //    ViewState[AntiXsrfUserNameKey] = Context.User.Identity.Name ?? String.Empty;
-            //}
-            //else
-            //{
-            //    // Validate the Anti-XSRF token
-            //    if ((string)ViewState[AntiXsrfTokenKey] != _antiXsrfTokenValue
-            //        || (string)ViewState[AntiXsrfUserNameKey] != (Context.User.Identity.Name ?? String.Empty))
-            //    {
-            //        throw new InvalidOperationException("Validation of Anti-XSRF token failed.");
-            //    }
-            //}
+            if (Page.AppRelativeVirtualPath != null && !Page.AppRelativeVirtualPath.ToLower().Contains("default.aspx"))
+            {
+                if (AdminUser.CurrentUser == null)
+                {
+                    HttpContext.Current.Response.Redirect("~/Default.aspx?error=sessionexpired");
+                }
+            }
+
+            if (!ValidIpAddress())
+            {
+                Response.Redirect("http://www.google.com");
+            }
         }
 
-        protected void Page_Load(object sender, EventArgs e)
+        private bool ValidIpAddress()
         {
+            string clientIp = (Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ??
+                   Request.ServerVariables["REMOTE_ADDR"]).Split(',')[0].Trim();
 
+            if(clientIp == "::1")
+            {
+                clientIp = "127.0.0.1";
+            }
+
+            var ipAddresses = ConfigurationManager.AppSettings["ipAddresses"].Split(',').ToList();
+
+            return ipAddresses.Contains(clientIp);
         }
     }
 

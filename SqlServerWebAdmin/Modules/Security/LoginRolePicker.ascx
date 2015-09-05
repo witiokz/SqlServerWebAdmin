@@ -1,7 +1,7 @@
-<%@ Control Language="c#" AutoEventWireup="false" Codebehind="LoginRolePicker.ascx.cs" Inherits="SqlServerWebAdmin.ItemPicker" TargetSchema="http://schemas.microsoft.com/intellisense/ie5"%>
-<table border=0 cellspacing=0 cellpadding=0>
+<%@ Control Language="c#" AutoEventWireup="false" Inherits="SqlServerWebAdmin.ItemPicker" TargetSchema="http://schemas.microsoft.com/intellisense/ie5"%>
+<table class="table table-bordered">
 	<tr>
-		<tr class="tableItems">
+		<tr>
 			<td>
 				Available Logins:
 			</td>
@@ -13,30 +13,16 @@
 			</td>
 		</tr>
 		<tr>	
-			<td class="databaseListItem">
-				<asp:ListBox
-					id="ItemsBox"
-					Runat="server"
-				/>
+			<td>
+				<asp:ListBox id="ItemsBox" CssClass="form-control" Runat="server"/>
 			</td>
-			<td class="databaseListItem">
-				<asp:Button
-					Text="<<<"
-					OnClick="RemoveItem_Click"
-					Runat="server"
-				/>
+			<td>
+				<asp:Button CssClass="btn btn-default" Text="<<<" OnClick="RemoveItem_Click" Runat="server" />
 				<br/>
-				<asp:Button
-					Text=">>>"
-					OnClick="AddItem_Click"
-					Runat="server"
-				/>
+				<asp:Button Text=">>>" CssClass="btn btn-default" OnClick="AddItem_Click" Runat="server" />
 			</td>
 			<td class="databaseListItem">
-				<asp:ListBox
-					id="SelectedItemsBox"
-					Runat="server"
-				/>
+				<asp:ListBox id="SelectedItemsBox" CssClass="form-control" Runat="server" />
 			</td>
 		</tr>
 	</table>

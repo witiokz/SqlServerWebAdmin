@@ -27,7 +27,6 @@ namespace SqlServerWebAdmin
                 }
                 catch (System.Exception ex)
                 {
-                    //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                     Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
                 }
 
@@ -38,7 +37,7 @@ namespace SqlServerWebAdmin
                     Response.Redirect("DatabaseRoles.aspx?database=" + Server.UrlEncode(Request["database"]));
 
                 RoleNameLabel.Text = role.Name;
-                RoleTypeLabel.Text = "some";//role.State ? "Application" : "Standard";
+                RoleTypeLabel.Text = role.IsFixedRole ? "Application" : "Standard";
 
                 if (/*role.AppRole*/false)
                 {
@@ -82,7 +81,6 @@ namespace SqlServerWebAdmin
             }
             catch (System.Exception ex)
             {
-                //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                 Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
             }
             try
@@ -113,7 +111,7 @@ namespace SqlServerWebAdmin
                 server.Disconnect();
             }
 
-            Response.Redirect("DatabaseRoles.aspx?database=" + Server.UrlEncode(Request["database"]));
+            Response.Redirect("~/Modules/DatabaseRole/DatabaseRoles.aspx?database=" + Server.UrlEncode(Request["database"]));
         }
     }
 }

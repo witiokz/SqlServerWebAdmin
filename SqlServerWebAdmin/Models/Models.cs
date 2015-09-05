@@ -155,39 +155,6 @@ namespace SqlServerWebAdmin.Models
 
         }
 
-        public static Server Connect()
-        {
-                if (AdminUser.CurrentUser == null)
-                {
-                    HttpContext.Current.Response.Redirect("~/Default.aspx?error=sessionexpired");
-                }
-
-                if (AdminUser.CurrentUser.UseIntegratedSecurity)
-                {
-                    Server server = new Server(AdminUser.CurrentUser.Server);
-                    server.ConnectionContext.LoginSecure = true;
-                    return server;
-                }
-                else
-                {
-                    Server server = new Server(AdminUser.CurrentUser.Server);
-                    server.ConnectionContext.LoginSecure = false;
-                    server.ConnectionContext.Login = AdminUser.CurrentUser.Username;
-                    server.ConnectionContext.Password = AdminUser.CurrentUser.Password;
-                    return server;
-                }
-            
-        }
-
-
-        public static void Disconnect(Server server)
-        {
-            if (server.ConnectionContext.IsOpen)
-            {
-                server.ConnectionContext.Disconnect();
-            }
-
-        }
     }
 
     public static class DbExtensions

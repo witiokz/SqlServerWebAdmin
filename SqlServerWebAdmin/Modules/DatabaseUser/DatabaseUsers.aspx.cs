@@ -31,7 +31,6 @@ namespace SqlServerWebAdmin
                 UsersGrid.DataSource = database.Users;
                 UsersGrid.DataBind();
 
-                CreateUserLink.NavigateUrl = "CreateDatabaseUser.aspx?database=" + Server.UrlEncode(database.Name);
 
                 server.Disconnect();
             }

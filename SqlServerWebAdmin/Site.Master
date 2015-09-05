@@ -1,6 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SqlServerWebAdmin.SiteMaster" %>
 
-<%@ Register TagPrefix="Toolbar" TagName="HelpLogout" Src="Toolbars/HelpLogoutToolbar.ascx" %>
 <%@ Register TagPrefix="Location" TagName="Server" Src="Toolbars/ServerLocation.ascx" %>
 <%@ Register TagPrefix="Toolbar" TagName="Server" Src="Toolbars/ServerToolbar.ascx" %>
 
@@ -37,17 +36,20 @@
                     </ul>
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
                         <AnonymousTemplate>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a runat="server" href="~/Account/Register">Register</a></li>
-                                <li><a runat="server" href="~/Account/Login">Log in</a></li>
-                            </ul>
                         </AnonymousTemplate>
                         <LoggedInTemplate>
                             <ul class="nav navbar-nav navbar-right">
                                    <%-- <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />--%>
                                     <% if(SqlServerWebAdmin.Models.AdminUser.CurrentUser != null)
                                        { %>
-                                        <Toolbar:HelpLogout runat="server" ID="HelpLogout" HelpTopic="login"></Toolbar:HelpLogout>
+                                        <li>
+                                        <asp:HyperLink id="HelpImageHyperLink" runat="server" Target="_blank">
+                                            Documentation
+                                        </asp:HyperLink>
+                                        </li>
+                                        <li>
+                                            <asp:HyperLink id="LogoutImageHyperLink" NavigateUrl="~/Modules/Account/Logout.aspx" runat="server" Text="Logout" />
+                                        </li>
                                     <% } %>
                             </ul>
                         </LoggedInTemplate>

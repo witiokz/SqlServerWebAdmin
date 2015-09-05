@@ -61,7 +61,6 @@ namespace SqlServerWebAdmin
                 }
                 catch (System.Exception ex)
                 {
-                    //Response.Redirect("Error.aspx?errorPassCode=" + 2002);
                     Response.Redirect(String.Format("error.aspx?errormsg={0}&stacktrace={1}", Server.UrlEncode(ex.Message), Server.UrlEncode(ex.StackTrace)));
                 }
 
