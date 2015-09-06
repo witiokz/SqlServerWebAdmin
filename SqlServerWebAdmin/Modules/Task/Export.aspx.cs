@@ -15,6 +15,8 @@ using System.Collections.Specialized;
 
 namespace SqlServerWebAdmin
 {
+    //https://www.mssqltips.com/sqlservertip/1833/generate-scripts-for-database-objects-with-smo-for-sql-server/
+    //http://www.mattjcowan.com/funcoding/2012/04/21/scripting-your-sql-database-using-smo-and-the-command-line/
     public partial class Export : System.Web.UI.Page
     {
         protected void Page_Load(object sender, System.EventArgs e)
@@ -103,28 +105,33 @@ namespace SqlServerWebAdmin
             scriptResult.Append(" */\r\n\r\n");
 
             Scripter scr = new Scripter(server);
-            server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.View), "IsSystemObject");
+            //server.SetDefaultInitFields(typeof(Microsoft.SqlServer.Management.Smo.View), "IsSystemObject");
 
             ScriptingOptions options = new ScriptingOptions();
-            options.DriAll = true;
+            //options.AppendToFile = true;
+            //options.AnsiFile = true;
+            //options.AnsiPadding = true;
+            //options.ChangeTracking = true;
+            //options.ToFileOnly = true;
             options.ClusteredIndexes = true;
-            options.Default = true;
-            options.Indexes = true;
+            options.ContinueScriptingOnError = false;
+            options.DriAll = true;
             options.IncludeHeaders = true;
-
-            options.AppendToFile = false;
-            options.TargetServerVersion = SqlServerVersion.Version100;
             options.IncludeIfNotExists = true;
-            options.Permissions = true;
-            options.ExtendedProperties = true;
+            options.Indexes = true;
+            //options.Default = true;
+            options.WithDependencies = true;
 
-            options.ScriptDrops = false;
-            options.ScriptSchema = scriptTableSchema;
+           
+            //options.TargetServerVersion = SqlServerVersion.Version100;
+            
+            //options.Permissions = true;
+            //options.ExtendedProperties = true;
+
+            //options.ScriptDrops = false;
+            //options.ScriptSchema = scriptTableSchema;
             //options.ScriptData = scriptTableData;
 
-            //options.NoCollation = true;
-            //options.NoFileGroup = true;
-            //options.NoIdentities = true;
             scr.ScriptingProgress += (q, w) => { var t = 1; };
             scr.Options = options;
 
@@ -132,7 +139,6 @@ namespace SqlServerWebAdmin
             database.Tables.CopyTo(tbls, 0);
             scr.Script(tbls);
 
-            options.AppendToFile = true;
             Microsoft.SqlServer.Management.Smo.View[] view = new Microsoft.SqlServer.Management.Smo.View[1];
             for (int idx = 0; idx < database.Views.Count; idx++)
             {

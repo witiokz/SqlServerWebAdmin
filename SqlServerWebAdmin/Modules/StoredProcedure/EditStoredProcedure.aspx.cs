@@ -94,6 +94,8 @@ namespace SqlServerWebAdmin
                     // SProc is new, so create entirely new SProc (don't care about return value)
                     sproc = new StoredProcedure(database, sprocName);
                     sproc.TextMode = false;
+                    sproc.AnsiNullsStatus = false;
+                    sproc.QuotedIdentifierStatus = false;
                     sproc.TextBody = TextTextbox.Text;
                     sproc.Create();
                 }

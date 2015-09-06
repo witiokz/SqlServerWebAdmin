@@ -47,10 +47,6 @@ namespace SqlServerWebAdmin
             string databaseName = this.ExportDatabaseList.SelectedItem.Text;
 
             Backup bkp = new Backup();
-
-            //this.Cursor = Cursors.WaitCursor;
-            //this.dataGridView1.DataSource = string.Empty;
-
            
             try
             {
@@ -64,6 +60,18 @@ namespace SqlServerWebAdmin
                 //this.progressBar1.Value = 0;
                 //this.progressBar1.Maximum = 100;
                 //this.progressBar1.Value = 10;
+
+                //backup.BackupSetDescription = "BackupDataBase description";
+                //Set the name used to identify a particular backup set.
+               // backup.BackupSetName = "Backup";
+                //backup.Initialize = true;
+                //backup.Checksum = true;
+                //Set it to true to have the process continue even after checksum error.
+                //backup.ContinueAfterError = true;
+                //Set the backup expiry date.
+                //backup.ExpirationDate = DateTime.Now.AddDays(3);
+                //truncate the database log as part of the backup operation.
+                //backup.LogTruncation = BackupTruncateLogType.Truncate;
 
                 bkp.PercentCompleteNotification = 10;
                 //bkp.PercentComplete += new PercentCompleteEventHandler(ProgressEventHandler);

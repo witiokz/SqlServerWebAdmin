@@ -75,6 +75,16 @@ namespace SqlServerWebAdmin
                 if (RestoreItem.SelectedItem.Value == "Restore")
                 {
                     res.ReplaceDatabase = true;
+                    //restore.NoRecovery = false;
+
+                    //if you want to restore to a different location, specify the logical
+                    // and physical file names
+                    //restore.RelocateFiles.Add(new RelocateFile("Test",
+                    // @"C:\Temp\Test.mdf"));
+                    //restore.RelocateFiles.Add(new RelocateFile("Test_Log",
+                    //@"C:\Temp\Test_Log.ldf"));
+
+
                     res.SqlRestore(server);
 
                     Status.Text = "Restore of " + databaseName + " Complete!";

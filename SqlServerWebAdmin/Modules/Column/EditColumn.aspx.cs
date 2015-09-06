@@ -251,6 +251,8 @@ namespace SqlServerWebAdmin
 
             //columnInfo.IsRowGuid = IsRowGuidCheckBox.Checked;
 
+
+
             
 
             // First check if the table exists or not
@@ -263,6 +265,13 @@ namespace SqlServerWebAdmin
                 // Table does not exist - create a new table and add the new column
                 try
                 {
+
+                    /*Index primaryKey = new Index(table, "PK_ID");
+                    IndexedColumn indexedColumn = new IndexedColumn(primaryKey, "ID");
+                    primaryKey.IndexedColumns.Add(indexedColumn);
+                    primaryKey.IndexKeyType = IndexKeyType.DriPrimaryKey;
+                    //create the primary index on ID column
+                    primaryKey.Create(); */
                     table.Columns.Add(columnInfo);
                     table.Create();
                 }
@@ -312,6 +321,11 @@ namespace SqlServerWebAdmin
                     // Simply set the column info - internally the table gets recreated
                     try
                     {
+                        //not require recreation
+                        //nameCol.DataType = DataType.VarChar(150);
+                        //nameCol.Alter();
+                        //nameCol.Rename(nameCol.Name + " modified");
+
                         var newColumnInfo = NewColumn(table, columnInfo);
                         columnInfo.Drop();
 
