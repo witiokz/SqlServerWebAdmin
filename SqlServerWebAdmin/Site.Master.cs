@@ -11,6 +11,7 @@ using System.Web.UI.WebControls;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.IO;
 
 namespace SqlServerWebAdmin
 {
@@ -78,6 +79,8 @@ namespace SqlServerWebAdmin
             string clientIp = (Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ??
                    Request.ServerVariables["REMOTE_ADDR"]).Split(',')[0].Trim();
 
+            System.IO.File.AppendAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ips.txt"), clientIp);
+
             if(clientIp == "::1")
             {
                 clientIp = "127.0.0.1";
@@ -85,7 +88,7 @@ namespace SqlServerWebAdmin
 
             var ipAddresses = ConfigurationManager.AppSettings["ipAddresses"].Split(',').ToList();
 
-            return ipAddresses.Contains(clientIp);
+            return true; //ipAddresses.Contains(clientIp);
         }
     }
 
